@@ -1,0 +1,87 @@
+{% extends 'post/base.html' %}
+
+{% block content %}
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const onLoadCallback = window.onload
+    window.onload = () => {
+        const Editor = toastui.Editor;
+        window.Editor = Editor;
+
+        onLoadCallback()
+        // const plugins = ['color-syntax']
+        const editor = new Editor({
+            el: document.querySelector('#editor'),
+            height: '500px',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical',
+            // plugins
+        });
+        editor.getMarkdown();
+
+    }
+    let saveImgBtnFound = false;
+
+    const overrideImageUpload = () => {
+        const saveImageBtn = document.getElementsByClassName('toastui-editor-ok-button')[0];
+        if (!saveImageBtn) {
+            window.toastUiWatcher = setTimeout(overrideImageUpload, 500)
+            return;
+        }
+        saveImageBtnFound = true;
+        return
+        console.log('found save image button')
+        const saveBtnWithoutEvents = saveImageBtn.cloneNode(true);
+        saveImageBtn.parentNode.replaceChild(saveBtnWithoutEvents, saveImageBtn);
+        saveBtnWithoutEvents
+            .addEventListener('click', () => {
+                const { imgFile, imgDescription } = getImageFields();
+                uploadImageFields(imgFile, imgDescription)
+            })
+    }
+
+    let startedImageWatcher = false;
+    if (!saveImgBtnFound && !startedImageWatcher) {
+        window.toastUiWatcher = setTimeout(overrideImageUpload, 500)
+        startedImageWatcher = true;
+    }
+    if (saveImgBtnFound) {
+        clearTimeout(window.toastUiWatcher)
+    }
+
+    /** @todo integrity */
+
+    const addCss = (fileName) => {
+        const head = document.head;
+        const link = document.createElement('link');
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        link.href = fileName;
+        head.appendChild(link);
+    }
+
+    const stylesheet = 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
+    addCss(stylesheet)
+</script>
+
+<form id="post_form" method="post" action="" enctype="multipart/form-data">
+    <div id="editor"></div>
+
+    {% csrf_token %}
+    {% for hidden in post_form.hidden_fields %}
+    {{ hidden }}
+    {% endfor %}
+
+    {% for field in post_form %}
+    {{ field }} <br />
+    {% endfor %}
+
+    {{ formset.management_form }}
+    {% for form in formset %}
+    {{ form }}
+    {% endfor %}
+
+
+    <input type="submit" name="submit" value="Submit" />
+</form>
+{% endblock %}
