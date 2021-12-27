@@ -1,0 +1,33 @@
+from django.http.response import HttpResponse
+from django.utils import timezone
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+
+from FreiRui.admin.category_forms import CategoryForm
+from FreiRui.models.Category import Category
+
+
+@login_required
+def category_edit(request, pk):
+    if request.method == "POST":
+        category = get_object_or_404(Category, pk=pk)
+        category_form = CategoryForm(request.POST, instance=category)
+        if category_form.is_valid():
+            category_form.save()
+            return HttpResponseRedirect(f"/category/{pk}/edit")
+        else:
+            print(category_form.errors)
+    # print(f'formset: {formset}')
+        return render(request, 'category/edit.html',
+                      {'category_form': category_form, 'category': category})
+
+    # else if request.method == "GET":
+    category_form = CategoryForm()
+    category = get_object_or_404(Category, pk=pk)
+    category_form.fields['name'].widget.attrs['value'] = category.name
+    category_form.fields['published'].widget.attrs['checked'] = category.published
+    # print(f'formset: {formset}')
+    return render(request, 'category/edit.html',
+                  {'category_form': category_form, 'category': category})

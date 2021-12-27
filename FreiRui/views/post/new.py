@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.shortcuts import render, redirect
 
-from ...admin.post_forms import PostForm
+from FreiRui.admin.post_forms import PostForm
 
 
 @login_required

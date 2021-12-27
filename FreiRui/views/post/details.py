@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from ...models.Post import Post
+from FreiRui.models.Post import Post
 
 
 def post_details(request, pk):

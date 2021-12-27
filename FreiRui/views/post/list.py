@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.utils import timezone
-from ...models.Post import Post
+from FreiRui.models.Post import Post
 
 
 def post_list(request):

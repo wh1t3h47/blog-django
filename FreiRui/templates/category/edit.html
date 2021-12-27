@@ -1,0 +1,16 @@
+{% extends 'post/base.html' %}
+
+{% block content %}
+
+<form id="post_form" method="post" action="" enctype="multipart/form-data">
+    <div id="editor"></div>
+
+    {% if not category.published %}
+    <p>category not published :^(</p>
+    {% endif %}
+
+    {% csrf_token %}
+    {{ category_form.as_p }}
+    <input type="submit" name="submit" value="Submit" />
+</form>
+{% endblock %}
