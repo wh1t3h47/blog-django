@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+
+from FreiRui.models.Gallery import Gallery
 from .Category import Category, CATEGORY_LENGTH
 
 TITLE_LENGTH = 200

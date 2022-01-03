@@ -1,35 +1,38 @@
-{% extends 'post/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css" integrity="sha384-rQdIropf4eQBEB9SkNB4xxukYHlkyXJfKYkpVNUQOLizz+d2q0wo7zjVA2XcYSij" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script>
-        const onloadOriginal = window.onload || function() {};
-        window.onload = () => {
-            onloadOriginal();
-            const simplemde = new SimpleMDE({ element: document.getElementById("markdown-editor") });
-            window.simplemde = simplemde;
-        }
-    </script>
+<!-- ESSE CÓDIGO NÃO ESTÁ SENDO USADO-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
+    integrity="sha384-rQdIropf4eQBEB9SkNB4xxukYHlkyXJfKYkpVNUQOLizz+d2q0wo7zjVA2XcYSij" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script>
+    const onloadOriginal = window.onload || function () { };
+    window.onload = () => {
+        onloadOriginal();
+        const simplemde = new SimpleMDE({ element: document.getElementById('markdown-editor') });
+        window.simplemde = simplemde;
+    };
 
-    <form id="post_form" method="post" action="" enctype="multipart/form-data">
-        <input id="markdown-editor"></input>
- 
-        {% csrf_token %}
-        {% for hidden in post_form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-     
-        {% for field in post_form %}
-            {{ field }} <br />
-        {% endfor %}
-     
-        {{ formset.management_form }}
-        {% for form in formset %}
-            {{ form }}
-        {% endfor %}
-     
-     
-        <input type="submit" name="submit" value="Submit" />
-    </form>
+</script>
+
+<form id="post_form" method="post" action="" enctype="multipart/form-data">
+    <input id="markdown-editor"></input>
+
+    {% csrf_token %}
+    {% for hidden in post_form.hidden_fields %}
+    {{ hidden }}
+    {% endfor %}
+
+    {% for field in post_form %}
+    {{ field }} <br />
+    {% endfor %}
+
+    {{ formset.management_form }}
+    {% for form in formset %}
+    {{ form }}
+    {% endfor %}
+
+
+    <input type="submit" name="submit" value="Submit" />
+</form>
 {% endblock %}

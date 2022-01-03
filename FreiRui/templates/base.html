@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Django Girls blog</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet'
+        type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.3.0/markdown-it.min.js"
+        integrity="sha512-q1tclxbgrDhFhGp/i9mnxITl2FQ3TCfwNj0mZ1r2USwj9WNXBpQ1au4HOBdAq8LXXWFIcsW+5dsdFHyVdk10AQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        window.onload = () => {
+            const postsRaw = [...document.getElementsByClassName('post-cruncher')]
+            postsRaw.forEach((rawPost) => {
+                // Converte o markdown dos posts em html
+                rawPost.innerHTML = window.markdownit().render(rawPost.innerHTML)
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page-header">
+        {% if user.is_authenticated %}
+        <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        {% endif %}
+        <h1><a href="/">Django Girls Blog</a></h1>
+    </div>
+    <div class="content container">
+        <div class="row">
+            <!-- div class="col-md-8" -->
+            {% block content %}
+            {% endblock %}
+            <!-- /div -->
+        </div>
+    </div>
+</body>
+
+</html>

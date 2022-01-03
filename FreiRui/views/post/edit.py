@@ -1,3 +1,6 @@
+from typing import Union
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -9,9 +12,10 @@ from FreiRui.admin.post_forms import PostForm
 from FreiRui.admin.image_forms import ImageForm
 from FreiRui.models.Post import Post
 
+ResponseOrRedirect = Union[HttpResponseRedirect, HttpResponse]
 
 @login_required
-def post_edit(request, pk):
+def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     if request.method == "POST":
         post = get_object_or_404(Post, pk=pk)
         post_form = PostForm(request.POST, instance=post)

@@ -10,6 +10,8 @@ from ...admin.image_forms import ImageForm
 from ...admin.post_forms import PostForm
 from ...models.Images import Images
 
+# ESSE ARQUIVO NÃO ESTA SENDO USADO
+
 image_form_set = modelformset_factory(Images,
                                       form=ImageForm, extra=30)
 # 'extra' means the number of photos that you can upload  ^

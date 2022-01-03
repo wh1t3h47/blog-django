@@ -3,8 +3,9 @@ from ..models.Images import Images
 
 
 class ImageForm(forms.ModelForm):
-    image = forms.ImageField(label='Image', required=False)
+    images = forms.FileField(label="Imagens", required=True,
+                             widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Images
-        fields = ('image', )
+        fields = ('images', )

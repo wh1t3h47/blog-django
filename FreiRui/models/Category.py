@@ -9,8 +9,8 @@ class Category(models.Model):
     published = models.BooleanField()
     ''' Boolean, if not published, will hide the category from the menu. '''
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return self.published

@@ -1,67 +1,143 @@
-{% extends 'post/base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="{% static 'toastui-editor-all.min.js' %}"></script>
+<script src="{% static 'tui-color-picker.min.js' %}"></script>
+<script src="{% static 'toastui-editor-plugin-color-syntax.min.js' %}"></script>
+<script src="{% static 'pt-br.min.js' %}"></script>
 <script>
-    const onLoadCallback = window.onload
-    window.onload = () => {
-        const Editor = toastui.Editor;
-        window.Editor = Editor;
+    // Esse onLoadCallback é outro onload de outro arquivo qualquer, para
+    // que, quando a página carregar, ele inicie todos os eventos que estão
+    // marcados com onload
 
-        onLoadCallback()
-        // const plugins = ['color-syntax']
+    const onLoadCallback = window.onload || function () { };
+
+    window.onload = () => {
+        // chama o evento onload registrado antes desse
+        onLoadCallback();
+
+        // Função utilizada para upload de multiplas imagens
+
+        const addImageBlobHook = async (_blob, callback) => {
+
+            const imagesForm = document.getElementById('toastuiImageFileInput');
+            const { files = [] } = imagesForm;
+            const descriptionForm = document.getElementById('toastuiAltTextInput');
+            const description = descriptionForm.value;
+            // Lógica para upar imagens respeitando o token de CSRF
+            const iframeToUpload = document.getElementById(
+                'gallery'
+            ).contentWindow.document;
+            const galleryForm = iframeToUpload.getElementById(
+                'gallery-form'
+            );
+            const imagesInput = iframeToUpload.getElementById('id_images');
+            // Popula a input dentro do iframe com as imagens da input do editor
+            imagesInput.files = files;
+
+            const formData = new FormData(galleryForm);
+            const uploaded = await fetch(
+                '/gallery/new/',
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
+
+            if (uploaded.ok) {
+                json = await uploaded.json();
+                if (json && Array.isArray(json.images)) {
+                    json.images.forEach((imageUrl) => {
+                        // console.log(imageUrl);
+                        callback(imageUrl, description);
+                    });
+                }
+            }
+        };
+
+        const { Editor = null } = toastui;
+
+        Editor.setLanguage('pt-BR', {
+            'Choose a file': 'Abrir arquivo',
+            'Select image file': 'Selecione uma ou mais imagens',
+        });
+
+        const plugins = [Editor.plugin.colorSyntax];
         const editor = new Editor({
             el: document.querySelector('#editor'),
             height: '500px',
-            initialEditType: 'markdown',
+            initialEditType: 'wysiwyg',
             previewStyle: 'vertical',
-            // plugins
+            // When editing a post, set initialValue to the post content
+            inititialValue: '',
+            plugins,
+            usageStatistics: false,
+            language: 'pt-BR',
+            hooks: {
+                addImageBlobHook,
+            },
         });
         editor.getMarkdown();
 
-    }
-    let saveImgBtnFound = false;
+        // Hack necessário para podermos criar uma galeria dentro da pasta de posts
+        // sem salvar ou abandonar a página (fetch para fazer o post não funciona
+        // por causa da proteção de CSRF, assim carregamos os forms num iframe)
+        (async () => {
+            const response = await fetch('/gallery/new');
+            const blob = await response.blob();
+            const text = await blob.text();
+            // console.log(text);
+            const iframe = document.createElement('iframe');
+            iframe.id = 'gallery';
+            iframe.srcdoc = text;
+            iframe.style.display = 'none';
+            document.body.append(iframe);
+        })();
+    };
+    const imageFormFound = false;
 
     const overrideImageUpload = () => {
-        const saveImageBtn = document.getElementsByClassName('toastui-editor-ok-button')[0];
-        if (!saveImageBtn) {
-            window.toastUiWatcher = setTimeout(overrideImageUpload, 500)
+        const imageForm = document.getElementById('toastuiImageFileInput');
+        if (!imageForm) {
+            window.toastUiWatcher = setTimeout(overrideImageUpload, 500);
             return;
         }
         saveImageBtnFound = true;
-        return
-        console.log('found save image button')
-        const saveBtnWithoutEvents = saveImageBtn.cloneNode(true);
-        saveImageBtn.parentNode.replaceChild(saveBtnWithoutEvents, saveImageBtn);
-        saveBtnWithoutEvents
-            .addEventListener('click', () => {
-                const { imgFile, imgDescription } = getImageFields();
-                uploadImageFields(imgFile, imgDescription)
-            })
-    }
+        console.log('found image form');
+
+        // Permite upar mais de uma imagem por vez
+        imageForm.multiple = true;
+    };
 
     let startedImageWatcher = false;
-    if (!saveImgBtnFound && !startedImageWatcher) {
-        window.toastUiWatcher = setTimeout(overrideImageUpload, 500)
+    if (!imageFormFound && !startedImageWatcher) {
+        // só roda uma vez
+        window.toastUiWatcher = setTimeout(overrideImageUpload, 500);
         startedImageWatcher = true;
     }
-    if (saveImgBtnFound) {
-        clearTimeout(window.toastUiWatcher)
+    if (imageFormFound) {
+        clearTimeout(window.toastUiWatcher);
     }
 
     /** @todo integrity */
 
     const addCss = (fileName) => {
-        const head = document.head;
+        const { head } = document;
         const link = document.createElement('link');
-        link.type = "text/css";
-        link.rel = "stylesheet";
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
         link.href = fileName;
         head.appendChild(link);
-    }
+    };
 
-    const stylesheet = 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
-    addCss(stylesheet)
+    const editorStylesheet = "{% static 'toastui-editor.min.css' %}";
+    const colorPickerStylesheet = "{% static 'tui-color-picker.min.css' %}";
+    const colorSyntaxPlugin = "{% static 'toastui-editor-plugin-color-syntax.min.css' %}";
+    addCss(editorStylesheet);
+    addCss(colorPickerStylesheet);
+    addCss(colorSyntaxPlugin);
+
 </script>
 
 <form id="post_form" method="post" action="" enctype="multipart/form-data">

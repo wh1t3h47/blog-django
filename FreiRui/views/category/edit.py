@@ -1,3 +1,5 @@
+from typing import Union
+from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -8,9 +10,10 @@ from django.contrib.auth.decorators import login_required
 from FreiRui.admin.category_forms import CategoryForm
 from FreiRui.models.Category import Category
 
+ResponseOrRedirect = Union[HttpResponse, HttpResponseRedirect]
 
 @login_required
-def category_edit(request, pk):
+def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     if request.method == "POST":
         category = get_object_or_404(Category, pk=pk)
         category_form = CategoryForm(request.POST, instance=category)
