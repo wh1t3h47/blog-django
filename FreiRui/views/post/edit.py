@@ -22,15 +22,19 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
         post = get_object_or_404(Post, pk=pk)
         post_form.fields['title'].widget.attrs['value'] = post.title
         post_form.fields['text'].widget.attrs['value'] = post.text
+        post_form.fields['text'].widget.attrs['required'] = True
         post_form.fields['text'].widget = forms.HiddenInput()
         post_form.fields['published_date'].widget.attrs['value'] = post.published_date
         post_form.fields['published_date'].widget.attrs['autocomplete'] = "off"
-        post_form.fields['category'].widget.attrs['value'] = post.category
+        post_form.fields['published_date'].widget.attrs['required'] = True
+        post_form.fields['galleries'].widget.attrs['style'] = "display: none;"
+
         default_values = {
             'title': post.title,
             'text': post.text,
             'published_date': post.published_date,
-            'category': post.category
+            'category': post.category,
+            'galleries': [str(x) for x in [*post.galleries.all()]]
         }
         # print(f'formset: {formset}')
         return render(request, 'post/edit.html',
@@ -40,10 +44,11 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
         post = get_object_or_404(Post, pk=pk)
         post_form = PostForm(request.POST, instance=post)
         if post_form.is_valid():
-            post_form = post_form.save(commit=False)
-            post_form.user = request.user
-            post_form.published_date = timezone.now()
-            post_form.save()
+            saved_post_form: PostForm = post_form.save(commit=False)
+            saved_post_form.user = request.user
+            saved_post_form.update_date = timezone.now()
+            saved_post_form.save()
+            post_form.save_m2m()
             return HttpResponseRedirect(f"/post/{pk}")
         else:
             print(post_form.errors)

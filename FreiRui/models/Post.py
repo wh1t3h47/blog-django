@@ -17,7 +17,9 @@ class Post(models.Model):
     title = models.CharField(max_length=TITLE_LENGTH)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
+    galleries = models.ManyToManyField(Gallery, blank=True)
 
     def publish(self):
         self.published_date = timezone.now()

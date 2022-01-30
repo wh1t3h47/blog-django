@@ -228,8 +228,13 @@
             );
 
             if (uploaded.ok) {
-                json = await uploaded.json();
+                const json = await uploaded.json();
                 if (json && Array.isArray(json.images)) {
+                    if (typeof json.gallery_id === "number" || typeof json.gallery_id === "string") {
+                        attachGallery(json.gallery_id);
+                        console.log(json.gallery_id)
+                    }
+
                     json.images.forEach((imageUrl) => {
                         // console.log(imageUrl);
                         callback(imageUrl, description);
@@ -309,11 +314,40 @@
             input: {
                 element: target,
                 // formato do django: 2021-12-22 02:45:38.594486+00:00
-                format: 'yyyy-MM-dd HH:mm:00.000000+00:00',
+                format: 'yyyy-MM-dd HH:mm:00.000000-03:00',
             },
             language: 'pt-BR',
             timePicker: true,
+            date: new Date('{{ default_values.published_date | escapejs }}'),
         });
+
+        // set select default category
+        const defaultValue = "{{ default_values.category | escapejs }}";
+        const categoryField = document.getElementById('id_category');
+        let optionValue = null;
+
+        for (const option of categoryField.childNodes) {
+            if (option.innerHTML === defaultValue) {
+                optionValue = option.value;
+                break;
+            }
+        }
+        if (optionValue !== null) {
+            categoryField.value = optionValue;
+        }
+
+        // select default galleries
+        const defaultGalleries = "{{ default_values.galleries | escapejs }}";
+        const galleriesField = document.getElementById('id_galleries');
+
+        if (defaultGalleries !== 'FreiRui.Gallery.None') {
+            const galleriesArray = eval(defaultGalleries);
+            for (const option of galleriesField.childNodes) {
+                if (galleriesArray.some((gallery) => gallery === option.innerHTML)) {
+                    option.selected = true;
+                }
+            }
+        }
 
     }; // final do window.onload
 
@@ -374,6 +408,22 @@
         submit_post_form.click();
     };
     window.onClickSubmit = onClickSubmit;
+
+    // Vincula as galerias criadas no post ao post
+
+    const attachGallery = (galleryId) => {
+        galleryId = `Gallery object (${galleryId})`;
+
+        const galleries = document.getElementById('id_galleries');
+        const lastGallery = galleries.lastElementChild;
+        const galleryValue = (lastGallery.value|0) + 1;
+        const option = document.createElement('option');
+        option.value = galleryValue;
+        option.selected = true;
+        option.innerHTML = galleryId;
+        galleries.appendChild(option);
+    };
+    window.attachGallery = attachGallery;
 
 </script>
 

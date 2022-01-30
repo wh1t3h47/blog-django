@@ -31,7 +31,7 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
                 # use django messages framework
                 messages.success(request,
                                  "Uploaded images to gallery")
-                return JsonResponse({'images': images_urls}, status=201)
+                return JsonResponse({'images': images_urls, 'gallery_id': gallery.pk}, status=201)
 
         # will reach here if images are invalid
         # 422 = Unprocessable Entity
