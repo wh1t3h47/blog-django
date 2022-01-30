@@ -8,7 +8,9 @@ from django.shortcuts import render, redirect
 
 from FreiRui.admin.category_forms import CategoryForm
 
-ResponseOrRedirect = Union[HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect]
+ResponseOrRedirect = Union[HttpResponse,
+                           HttpResponseRedirect, HttpResponsePermanentRedirect]
+
 
 @login_required
 def category_new(request: HttpRequest) -> ResponseOrRedirect:

@@ -12,6 +12,7 @@ from FreiRui.models.Category import Category
 
 ResponseOrRedirect = Union[HttpResponse, HttpResponseRedirect]
 
+
 @login_required
 def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     if request.method == "POST":

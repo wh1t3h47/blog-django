@@ -27,7 +27,7 @@ def post_image_upload(request, pk: str):
     if post_form.is_valid() and formset.is_valid():
         post_form = post_form.save(commit=False)
         post_form.user = request.user
-        post_form.pubblished_date = timezone.now()
+        post_form.published_date = timezone.now()
         post_form.save()
 
         for form in formset.cleaned_data:

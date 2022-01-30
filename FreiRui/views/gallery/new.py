@@ -11,6 +11,7 @@ from FreiRui.models.Gallery import Gallery
 
 ResponseOrRedirect = Union[HttpResponse, JsonResponse]
 
+
 @login_required
 def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
     if request.method == "POST":

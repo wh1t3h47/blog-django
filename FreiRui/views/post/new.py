@@ -8,7 +8,9 @@ from django.shortcuts import render, redirect
 
 from FreiRui.admin.post_forms import PostForm
 
-ResponseOrRedirect = Union[HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect]
+ResponseOrRedirect = Union[HttpResponse,
+                           HttpResponseRedirect, HttpResponsePermanentRedirect]
+
 
 @login_required
 def post_new(request: HttpRequest) -> ResponseOrRedirect:

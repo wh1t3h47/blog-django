@@ -6,6 +6,8 @@
 <script src="{% static 'tui-color-picker.min.js' %}"></script>
 <script src="{% static 'toastui-editor-plugin-color-syntax.min.js' %}"></script>
 <script src="{% static 'pt-br.min.js' %}"></script>
+<script src="{% static 'tui-time-picker.min.js' %}"></script>
+<script src="{% static 'tui-date-picker.min.js' %}"></script>
 <script>
     // Esse onLoadCallback é outro onload de outro arquivo qualquer, para
     // que, quando a página carregar, ele inicie todos os eventos que estão
@@ -16,6 +18,186 @@
     window.onload = () => {
         // chama o evento onload registrado antes desse
         onLoadCallback();
+
+        const PREFIX = 'toastui-editor-';
+
+        const addLangs = (i18n) => {
+            i18n.setLanguage(['pt', 'pt-BR'], {
+                'Align text left': 'Alinhar texto a esquerda',
+            });
+
+
+            i18n.setLanguage(['pt', 'pt-BR'], {
+                'Align text center': 'Alinhar texto ao centro',
+            });
+
+            i18n.setLanguage(['pt', 'pt-BR'], {
+                'Justify text': 'Justificar texto',
+            });
+
+            i18n.setLanguage(['pt', 'pt-BR'], {
+                'Align text right': 'Alinhar texto a direita',
+            });
+        }
+
+        const createToolbarItemOption = (alignContent, i18n) => {
+            return [
+                {
+                    name: 'alignLeft',
+                    tooltip: i18n.get('Align text left'),
+                    className: `${PREFIX}toolbar-icons align-left`,
+                    // roda a função inscrita em markdownCommands ou wysiwygCommands
+                    command: 'alignTextLeft'
+                },
+                {
+                    name: 'alignCenter',
+                    tooltip: i18n.get('Align text center'),
+                    className: `${PREFIX}toolbar-icons align-center`,
+                    command: 'alignTextCenter'
+                },
+                {
+                    name: 'alignJustify',
+                    tooltip: i18n.get('Justify text'),
+                    className: `${PREFIX}toolbar-icons align-justify`,
+                    command: 'alignTextJustify'
+                },
+                {
+                    name: 'alignRight',
+                    tooltip: i18n.get('Align text right'),
+                    className: `${PREFIX}toolbar-icons align-right`,
+                    command: 'alignTextRight'
+                },
+            ]
+        }
+
+        const createSelection = (
+            tr,
+            selection,
+            SelectionClass,
+            openTag,
+            closeTag
+        ) => {
+            const { mapping, doc } = tr;
+            const { from, to, empty } = selection;
+            const mappedFrom = mapping.map(from) + openTag.length;
+            const mappedTo = mapping.map(to) - closeTag.length;
+
+            return empty
+                ? SelectionClass.create(doc, mappedTo, mappedTo)
+                : SelectionClass.create(doc, mappedFrom, mappedTo);
+        }
+
+        let currentEditorEl;
+
+        /**
+         * Align plugin
+         * @param {Object} context - plugin context for communicating with editor
+         * @param {Object} options - options for plugin
+         */
+        const alignTextPlugin = (
+            context,
+            options = {}
+        ) => {
+            const { eventEmitter, i18n, usageStatistics = false, pmState } = context;
+
+            addLangs(i18n);
+            const toolbarItems = createToolbarItemOption(null, i18n);
+
+            const pluginReturn = {
+                markdownCommands: {
+                    alignTextLeft: (_, ...rest) => pluginReturn.markdownCommands.alignText({ selectedAlignment: 'left' }, ...rest),
+                    alignTextRight: (_, ...rest) => pluginReturn.markdownCommands.alignText({ selectedAlignment: 'right' }, ...rest),
+                    alignTextCenter: (_, ...rest) => pluginReturn.markdownCommands.alignText({ selectedAlignment: 'center' }, ...rest),
+                    alignTextJustify: (_, ...rest) => pluginReturn.markdownCommands.alignText({ selectedAlignment: 'justify' }, ...rest),
+
+                    alignText: ({ selectedAlignment }, { tr, selection, schema }, dispatch) => {
+                        if (selectedAlignment) {
+                            const slice = selection.content();
+                            const textContent = slice.content.textBetween(0, slice.content.size, '\n');
+                            const openTag = `<span style="display: block; text-align: ${selectedAlignment};">`;
+                            const closeTag = `</span>`;
+                            const colored = `${openTag}${textContent}${closeTag}`;
+
+                            tr.replaceSelectionWith(schema.text(colored)).setSelection(
+                                createSelection(tr, selection, pmState.TextSelection, openTag, closeTag)
+                            );
+
+                            dispatch(tr);
+
+                            return true;
+                        }
+                        return false;
+                    },
+                },
+                wysiwygCommands: {
+                    alignTextLeft: (_, ...rest) => pluginReturn.wysiwygCommands.alignText({ selectedAlignment: 'left' }, ...rest),
+                    alignTextRight: (_, ...rest) => pluginReturn.wysiwygCommands.alignText({ selectedAlignment: 'right' }, ...rest),
+                    alignTextCenter: (_, ...rest) => pluginReturn.wysiwygCommands.alignText({ selectedAlignment: 'center' }, ...rest),
+                    alignTextJustify: (_, ...rest) => pluginReturn.wysiwygCommands.alignText({ selectedAlignment: 'justify' }, ...rest),
+
+                    alignText: ({ selectedAlignment }, { tr, selection, schema }, dispatch) => {
+                        if (selectedAlignment) {
+                            const { from, to } = selection;
+                            const attrs = { htmlAttrs: { style: `display: block; text-align: ${selectedAlignment};` } };
+                            const mark = schema.marks.span.create(attrs);
+
+                            tr.addMark(from, to, mark);
+                            dispatch(tr);
+
+                            return true;
+                        }
+                        return false;
+                    },
+                },
+                toolbarItems: toolbarItems.map((item, i) => ({
+                    groupIndex: 0,
+                    itemIndex: 3 + i,
+                    item,
+                })),
+                toHTMLRenderers: {
+                    htmlInline: {
+                        span(node, { entering }) {
+                            return entering
+                                ? { type: 'openTag', tagName: 'span', attributes: node.attrs }
+                                : { type: 'closeTag', tagName: 'span' };
+                        },
+                    },
+                },
+            };
+
+            return pluginReturn;
+        }
+
+        // Adiciona o CSS do alinhador de imagens
+        const addInlineCss = (css) => {
+            const { head } = document;
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = css;
+            head.appendChild(style);
+        }
+        addInlineCss(
+            `.align-left {
+                background: url({% static 'align_text_left-64x64.png' %});
+                background-position: center;
+                background-size: contain;
+            }
+            .align-center {
+                background: url({% static 'align_text_center-64x64.png' %});
+                background-position: center;
+                background-size: contain;
+            }
+            .align-justify {
+                background: url({% static 'align_text_justify-64x64.png' %});
+                background-position: center;
+                background-size: contain;
+            }
+            .align-right {
+                background: url({% static 'align_text_right-64x64.png' %});
+                background-position: center;
+                background-size: contain;
+            }`
+        );
 
         // Função utilizada para upload de multiplas imagens
 
@@ -56,6 +238,7 @@
             }
         };
 
+        toastui.usageStatistics = false;
         const { Editor = null } = toastui;
 
         Editor.setLanguage('pt-BR', {
@@ -63,14 +246,14 @@
             'Select image file': 'Selecione uma ou mais imagens',
         });
 
-        const plugins = [Editor.plugin.colorSyntax];
+        const plugins = [Editor.plugin.colorSyntax, alignTextPlugin];
         const editor = new Editor({
             el: document.querySelector('#editor'),
             height: '500px',
             initialEditType: 'wysiwyg',
             previewStyle: 'vertical',
             // When editing a post, set initialValue to the post content
-            inititialValue: '',
+            initialValue: '{{ default_values.text|escapejs }}',
             plugins,
             usageStatistics: false,
             language: 'pt-BR',
@@ -78,13 +261,13 @@
                 addImageBlobHook,
             },
         });
-        editor.getMarkdown();
+        window.editor = editor;
 
         // Hack necessário para podermos criar uma galeria dentro da pasta de posts
         // sem salvar ou abandonar a página (fetch para fazer o post não funciona
         // por causa da proteção de CSRF, assim carregamos os forms num iframe)
         (async () => {
-            const response = await fetch('/gallery/new');
+            const response = await fetch('/gallery/new/');
             const blob = await response.blob();
             const text = await blob.text();
             // console.log(text);
@@ -94,7 +277,47 @@
             iframe.style.display = 'none';
             document.body.append(iframe);
         })();
-    };
+
+        // date time picker
+        tui.usageStatistics = false;
+        const { DatePicker = null } = tui;
+
+        // pt-BR para date time picker
+        DatePicker.localeTexts['pt-BR'] = {
+            titles: {
+                // days
+                DD: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                // daysShort
+                D: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                // months
+                MMMM: [
+                    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ],
+                // monthsShort
+                MMM: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+            },
+            titleFormat: 'MMM yyyy',
+            todayFormat: 'D, dd \\de MMMM \\de yyyy',
+            date: 'Date',
+            time: 'Time'
+        };
+
+        const target = document.getElementById('id_published_date');
+        const instance = new tui.DatePicker('#datepicker-wrapper', {
+            usageStatistics: false,
+            input: {
+                element: target,
+                // formato do django: 2021-12-22 02:45:38.594486+00:00
+                format: 'yyyy-MM-dd HH:mm:00.000000+00:00',
+            },
+            language: 'pt-BR',
+            timePicker: true,
+        });
+
+    }; // final do window.onload
+
+
     const imageFormFound = false;
 
     const overrideImageUpload = () => {
@@ -134,30 +357,36 @@
     const editorStylesheet = "{% static 'toastui-editor.min.css' %}";
     const colorPickerStylesheet = "{% static 'tui-color-picker.min.css' %}";
     const colorSyntaxPlugin = "{% static 'toastui-editor-plugin-color-syntax.min.css' %}";
+    const timePickerStylesheet = "{% static 'tui-time-picker.min.css' %}";
+    const datePickerStylesheet = "{% static 'tui-date-picker.min.css' %}";
     addCss(editorStylesheet);
     addCss(colorPickerStylesheet);
     addCss(colorSyntaxPlugin);
+    addCss(timePickerStylesheet);
+    addCss(datePickerStylesheet);
+
+    const onClickSubmit = (_ev) => {
+        // insere o texto do editor no input do form
+        const _target = document.getElementById('id_text');
+        _target.value = editor.getMarkdown();
+
+        const submit_post_form = document.getElementById('submit_post_form');
+        submit_post_form.click();
+    };
+    window.onClickSubmit = onClickSubmit;
 
 </script>
 
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
     <div id="editor"></div>
+    <div id="datepicker-wrapper"></div>
 
     {% csrf_token %}
-    {% for hidden in post_form.hidden_fields %}
-    {{ hidden }}
-    {% endfor %}
-
     {% for field in post_form %}
     {{ field }} <br />
     {% endfor %}
 
-    {{ formset.management_form }}
-    {% for form in formset %}
-    {{ form }}
-    {% endfor %}
-
-
-    <input type="submit" name="submit" value="Submit" />
+    <button type="button" onclick="onClickSubmit()">Salvar</button>
+    <input type="submit" name="submit" value="Salvar" style="display: none;" id="submit_post_form" />
 </form>
 {% endblock %}
