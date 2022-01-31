@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for gallery in galleries %}
+    {% if gallery|length > 1 %}
+    <div style="margin-top: 30px; border: 1px solid #ccc; display: grid; place-items: center;">
+    {% endif %}
+
+    {% for picture in gallery %}
+        <img src="/media/{{ picture }}" alt="{{ picture }}" width="200" />
+    {% endfor %}
+    {% if gallery|length > 1 %}
+        <p style="text-align: center; width: 100%;"> Clique na imagem para editar... </p>
+    {% endif %}
+    </div>
+
+{% endfor %}
+
+{% endblock %}
