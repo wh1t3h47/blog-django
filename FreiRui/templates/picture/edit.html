@@ -22,10 +22,21 @@
         return new File([u8arr], filename, { type: mime });
     }
 
-    const onComplete = (data) => {
+
+    const language = 'en';
+    const translations = {
+        en: {
+            'toolbar.download': 'Modificar imagem',
+        },
+    };
+
+    const onClose = () => {
+        window.history.back();
+    }
+
+    const onBeforeComplete = (data) => {
         const { canvas } = data;
-        console.log('onComplete', data);
-        console.log(dataURLtoFile(canvas.toDataURL('image/png')));
+
         const formData = new FormData();
         formData.append('images', dataURLtoFile(canvas.toDataURL('image/png')));
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
@@ -36,18 +47,28 @@
 
             });
             const json = await response.json();
-            console.log(json);
             if (json.image) {
-                // refresh the page
-                window.location.reload();
+                // sucesso editando a imagem, voltar para o post
+                window.history.back();
             }
         })();
+        return false;
     }
-    const ImageEditor = new FilerobotImageEditor({}, { onComplete });
+    const ImageEditor = new FilerobotImageEditor(
+        {
+            translations,
+            language,
+        },
+        {
+            onBeforeComplete,
+            onClose,
+        }
+    );
     const imageEditorOpen = () => {
         ImageEditor.open(decodeURIComponent('/media/{{ picture.image | escapejs }}'));
     };
     window.ImageEditorOpen = imageEditorOpen;
+    imageEditorOpen();
 
     const onClickSubmit = (_ev) => {
         // insere o texto do editor no input do form
@@ -65,8 +86,8 @@
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ image_form.as_p }}
-    <img src="/media/{{ picture.image }}" alt="{{ picture.image }}" width="200" onclick="ImageEditorOpen()" />
-    <p> Clique na imagem para editar... </p>
+    <!-- img src="/media/{{ picture.image }}" alt="{{ picture.image }}" width="200" onclick="ImageEditorOpen()" />
+    <p> Clique na imagem para editar... </p -->
     <input type="submit" name="submit" value="Submit" style="display: none;" />
 </form>
 {% endblock %}

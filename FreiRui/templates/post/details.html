@@ -1,17 +1,51 @@
 {% extends 'base.html' %}
+{% load markdown_deux_tags %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+<a href="{% url 'post_edit' pk=post.pk %}" class="top-menu" style="margin-top: 50px; display: block;">
+    <i class="fas fa-edit fa-5x"></i>
+    <p> Editar post </p>
+</a>
+
+<script>
+    const oldWindowOnload = window.onload;
+    window.onload = () => {
+        if (oldWindowOnload) {
+            oldWindowOnload();
+        }
+
+        // seleciona todas as imagens do post
+        const images = document.querySelectorAll('.content img');
+        images.forEach((image) => {
+            // adiciona um botão de editar embaixo de cada imagem
+            const edit_button = document.createElement('button');
+            edit_button.innerText = 'Editar';
+            // adiciona o evento de click para cada imagem
+            edit_button.addEventListener('click', (ev) => {
+                const imageEditorOpen = window.ImageEditorOpen;
+                const relativePath = image.src.replace(`${window.location.origin}/media/`, '')
+                window.location.href = `/picture/${relativePath}/edit/`;
+            });
+            // substitui a imagem por uma div
+            const image_div = document.createElement('div');
+            image_div.style = 'display: flex; flex-direction: column; margin-bottom: 40px;';
+            image_div.appendChild(image.cloneNode(true));
+            image_div.appendChild(edit_button);
+            image.replaceWith(image_div);
+        });
+    };
+</script>
+{% endif %}
+
 <div class="post">
     {% if post.published_date %}
     <div class="date">
         {{ post.published_date }}
     </div>
     {% endif %}
-    {% if user.is_authenticated %}
-    <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span
-            class="glyphicon glyphicon-pencil"></span></a>
-    {% endif %}
     <h2>{{ post.title }}</h2>
-    <p class="post-cruncher">{{ post.text }}</p>
+    <p class="post-cruncher">{{ post.text | markdown:"safe" }}</p>
 </div>
 {% endblock %}

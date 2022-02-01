@@ -232,7 +232,6 @@
                 if (json && Array.isArray(json.images)) {
                     if (typeof json.gallery_id === "number" || typeof json.gallery_id === "string") {
                         attachGallery(json.gallery_id);
-                        console.log(json.gallery_id)
                     }
 
                     json.images.forEach((imageUrl) => {
@@ -349,6 +348,20 @@
             }
         }
 
+        // seleciona todas as imagens do post
+        const images = document.querySelectorAll('.content img');
+        images.forEach((image) => {
+
+            // adiciona o evento de click para cada imagem
+            image.addEventListener('click', (ev) => {
+                const confirmation = confirm('Tem certeza que deseja sair da página para editar esta imagem?');
+                if (confirmation) {
+                    const relativePath = image.src.replace(`${window.location.origin}/media/`, '')
+                    window.location.href = `/picture/${relativePath}/edit/`;
+                }
+            });
+        });
+
     }; // final do window.onload
 
 
@@ -361,7 +374,6 @@
             return;
         }
         saveImageBtnFound = true;
-        console.log('found image form');
 
         // Permite upar mais de uma imagem por vez
         imageForm.multiple = true;

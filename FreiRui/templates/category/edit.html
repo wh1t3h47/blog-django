@@ -5,7 +5,6 @@
 <script>
     /** @type {'accordion' | 'cards'} */
     let listingType = '{{ category.listing_type | escapejs }}';
-    console.log('listingType', listingType);
 
     const onChangeListingType = (newType) => {
         window.listingType = newType;
