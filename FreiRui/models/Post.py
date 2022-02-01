@@ -13,12 +13,12 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # category = models.CharField(max_length=CATEGORY_LENGTH, choices=Category.objects.all())
     category = models.ForeignKey(
-        Category, on_delete=models.DO_NOTHING)
-    title = models.CharField(max_length=TITLE_LENGTH)
+        Category, on_delete=models.DO_NOTHING, verbose_name="Categoria da postagem")
+    title = models.CharField(max_length=TITLE_LENGTH, verbose_name="Título")
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True, verbose_name="Data de publicação (selecione no futuro para agendar)")
     galleries = models.ManyToManyField(Gallery, blank=True)
 
     def publish(self):

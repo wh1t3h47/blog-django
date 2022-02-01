@@ -5,8 +5,9 @@ from django.http.response import HttpResponse
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 
 from FreiRui.models.Images import Images
 from FreiRui.admin.post_forms import PostForm
@@ -40,4 +41,6 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
 
     # else if request.method == "GET":
     post_form = PostForm()
-    return return_rendered_html_forms(request, post_form, pk)
+    response = return_rendered_html_forms(request, post_form, pk)
+    response['Cache-Control'] = f'max-age={-1}'
+    return response

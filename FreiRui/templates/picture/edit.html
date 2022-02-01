@@ -31,7 +31,10 @@
     };
 
     const onClose = () => {
-        window.history.back();
+        setTimeout(() => {
+            // window.location.reload();
+            window.location.href = `${document.referrer}?refresh=1`;
+        }, 2000);
     }
 
     const onBeforeComplete = (data) => {
@@ -46,10 +49,15 @@
                 body: formData,
 
             });
+
             const json = await response.json();
             if (json.image) {
                 // sucesso editando a imagem, voltar para o post
-                window.history.back();
+                // funciona como window.history.back(), mas força o reload da página anterior
+                setTimeout(() => {
+                    // window.location.reload();
+                    window.location.href = `${document.referrer}?refresh=1`;
+                }, 200);
             }
         })();
         return false;

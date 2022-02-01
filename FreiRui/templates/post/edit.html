@@ -362,8 +362,27 @@
             });
         });
 
-    }; // final do window.onload
 
+        // recarrega a página se uma imagem tiver sido editada para previnir cache antigo
+
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        if (params.refresh) {
+            setTimeout(() => {
+                
+                // remove refresh param
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    window.location.pathname,
+                );
+                location.reload(true);
+            }, 200);
+        }
+
+
+    }; // final do window.onload
 
     const imageFormFound = false;
 
@@ -436,17 +455,19 @@
         galleries.appendChild(option);
     };
     window.attachGallery = attachGallery;
+    const metaTag = '<meta http-equiv="Cache-control" content="no-cache">';
+    document.head.insertAdjacentHTML('beforeend', metaTag);
 
 </script>
 
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
-    <div id="editor"></div>
-    <div id="datepicker-wrapper"></div>
+    <div id="editor" style="margin-top: 80px;"></div>
+    <div id="datepicker-wrapper" style="display: flex; justify-content: end; margin-right: 10%;"></div>
 
-    {% csrf_token %}
-    {% for field in post_form %}
-    {{ field }} <br />
-    {% endfor %}
+    <div class="post-forms">
+        {% csrf_token %}
+        {{ post_form.as_p }} <br />
+    </div>
 
     <button type="button" onclick="onClickSubmit()">Salvar</button>
     <input type="submit" name="submit" value="Salvar" style="display: none;" id="submit_post_form" />
