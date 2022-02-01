@@ -13,5 +13,6 @@ def post_list(request: HttpRequest, category: str) -> HttpResponse:
     posts: List[Post] = Post.objects.filter(
         category__name=category,
         category__published=True,
+        is_deleted=False,
         published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'post/list.html', {'posts': posts, 'categories': categories})

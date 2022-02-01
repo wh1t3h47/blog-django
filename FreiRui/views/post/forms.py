@@ -16,6 +16,7 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
         post_form.fields['title'].widget.attrs['value'] = post.title
         post_form.fields['text'].widget.attrs['value'] = post.text
         post_form.fields['published_date'].widget.attrs['value'] = post.published_date
+        post_form.fields['is_deleted'].widget.attrs['checked'] = post.is_deleted
     post_form.fields['text'].widget.attrs['required'] = True
     post_form.fields['text'].widget = forms.HiddenInput()
     post_form.fields['published_date'].widget.attrs['autocomplete'] = "off"
