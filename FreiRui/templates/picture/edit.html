@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form id="post_form" method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ image_form.as_p }}
+        <img src="/media/{{ picture.image }}" alt="{{ picture.image }}" width="200" />
+        <input type="submit" name="submit" value="Submit" />
+    </form>
+{% endblock %}
