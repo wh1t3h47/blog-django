@@ -5,7 +5,7 @@ from .Gallery import Gallery
 
 
 def get_image_filename(instance, filename: str):
-    if instance.edit_image:
+    if hasattr(instance, 'edit_image') and instance.edit_image:
         # Nesse caso estamos editando a imagem e queremos conservar o
         # nome original
         return instance.image_url

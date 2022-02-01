@@ -8,6 +8,7 @@ from FreiRui.models.Gallery import Gallery
 from FreiRui.models.Images import Images
 from FreiRui.models.Post import Post
 
+
 @login_required
 def gallery_list(request: HttpRequest) -> HttpResponse:
     posts: List[Post] = Post.objects.filter(
@@ -21,7 +22,8 @@ def gallery_list(request: HttpRequest) -> HttpResponse:
         for gallery in all_galeries:
             Images.objects.filter(gallery=gallery)
             all_images: List[Images] = Images.objects.filter(gallery=gallery)
-            images_links: List[str] = [str(image.image) for image in all_images]
+            images_links: List[str] = [str(image.image)
+                                       for image in all_images]
             pictures_in_post = [*pictures_in_post, *images_links]
         galleries.append(pictures_in_post)
     print(galleries)

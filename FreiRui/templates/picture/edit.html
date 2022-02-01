@@ -1,10 +1,72 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <form id="post_form" method="post" action="" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ image_form.as_p }}
-        <img src="/media/{{ picture.image }}" alt="{{ picture.image }}" width="200" />
-        <input type="submit" name="submit" value="Submit" />
-    </form>
+<script src="{% static 'filerobot-image-editor.min.js' %}"></script>
+<script>
+    const dataURLtoFile = (
+        dataurl,
+        filename = decodeURIComponent('/media/{{ picture.image | escapejs }}'),
+    ) => {
+
+        let arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    const onComplete = (data) => {
+        const { canvas } = data;
+        console.log('onComplete', data);
+        console.log(dataURLtoFile(canvas.toDataURL('image/png')));
+        const formData = new FormData();
+        formData.append('images', dataURLtoFile(canvas.toDataURL('image/png')));
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        (async () => {
+            const response = await fetch('./', {
+                method: 'POST',
+                body: formData,
+                
+            });
+            const json = await response.json();
+            console.log(json);
+            if (json.image) {
+                // refresh the page
+                window.location.reload();
+            }
+        })();
+    }
+    const ImageEditor = new FilerobotImageEditor({}, { onComplete });
+    const imageEditorOpen = () => {
+        ImageEditor.open(decodeURIComponent('/media/{{ picture.image | escapejs }}'));
+    };
+    window.ImageEditorOpen = imageEditorOpen;
+
+    const onClickSubmit = (_ev) => {
+        // insere o texto do editor no input do form
+        const _target = document.getElementById('id_text');
+        _target.value = editor.getMarkdown();
+
+        const submit_post_form = document.getElementById('submit_post_form');
+        submit_post_form.click();
+    };
+    window.onClickSubmit = onClickSubmit;
+</script>
+<div id="tui-image-editor">
+    <canvas></canvas>
+</div>
+<form id="post_form" method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ image_form.as_p }}
+    <img src="/media/{{ picture.image }}" alt="{{ picture.image }}" width="200" onclick="ImageEditorOpen()" />
+    <p> Clique na imagem para editar... </p>
+    <input type="submit" name="submit" value="Submit" style="display: none;" />
+</form>
 {% endblock %}
