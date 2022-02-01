@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markdown_deux_tags %}
 
 {% block content %}
 {% for post in posts %}
@@ -7,7 +8,7 @@
         {{ post.published_date }}
     </div>
     <h2><a href="{% url 'post_details' category=post.category pk=post.pk %}">{{ post.title }}</a></h2>
-    <p class="post-cruncher">{{ post.text }}</p>
+    <p class="post-details">{{ post.text | markdown:"safe" }}</p>
 </div>
 {% endfor %}
 {% endblock %}
