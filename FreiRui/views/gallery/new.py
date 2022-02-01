@@ -1,4 +1,4 @@
-from typing import Union
+from typing import List, Union
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from FreiRui.admin.image_forms import ImageForm
+from FreiRui.models.Category import Category
 from FreiRui.models.Images import Images
 from FreiRui.models.Gallery import Gallery
 
@@ -38,4 +39,5 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
         return HttpResponse(status=422)
     # else if request.method == "GET":
     form = ImageForm()
-    return render(request, 'gallery/new.html', {'form': form})
+    categories: List[Category] = Category.objects.all()
+    return render(request, 'gallery/new.html', {'form': form, 'categories': categories})

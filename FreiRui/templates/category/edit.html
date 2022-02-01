@@ -2,6 +2,61 @@
 
 {% block content %}
 
+<script>
+    /** @type {'accordion' | 'cards'} */
+    let listingType = '{{ category.listing_type | escapejs }}';
+    console.log('listingType', listingType);
+
+    const onChangeListingType = (newType) => {
+        window.listingType = newType;
+        const listingTypeInput = document.getElementById('id_listing_type');
+        listingTypeInput.value = newType;
+        if (newType === 'accordion') {
+            document.getElementById('accordion-listing').checked = true;
+            document.getElementById('cards-listing').checked = false;
+        } else {
+            document.getElementById('cards-listing').checked = true;
+            document.getElementById('accordion-listing').checked = false;
+        }
+    };
+    const setAccordion = () => {
+        onChangeListingType('accordion');
+    };
+    const setCards = () => {
+        onChangeListingType('cards');
+    };
+    const flip = () => {
+        if (window.listingType === 'accordion') {
+            setCards();
+        } else {
+            setAccordion();
+        }
+    };
+    const isCheckedAccordion = () => {
+        return window.listingType === 'accordion';
+    };
+    const isCheckedCards = () => {
+        return window.listingType === 'cards';
+    };
+
+    window.flip = flip;
+    window.isCheckedAccordion = isCheckedAccordion;
+    window.isCheckedCards = isCheckedCards;
+    window.listingType = listingType;
+
+    const oldWindowOnload = window.onload;
+    window.onload = () => {
+        if (window.listingType === 'accordion') {
+            setAccordion();
+        } else {
+            setCards();
+        }
+    };
+
+</script>
+
+<input type="checkbox" onchange="flip()" id="accordion-listing"> Listagem em acordião? </input>
+<input type="checkbox" onchange="flip()" id="cards-listing"> Listagem em cartões? </input>
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
     <div id="editor"></div>
 

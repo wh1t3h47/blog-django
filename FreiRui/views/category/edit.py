@@ -1,4 +1,4 @@
-from typing import Union
+from typing import List, Union
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.utils import timezone
@@ -32,6 +32,8 @@ def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     category = get_object_or_404(Category, pk=pk)
     category_form.fields['name'].widget.attrs['value'] = category.name
     category_form.fields['published'].widget.attrs['checked'] = category.published
+    category_form.fields['listing_type'].widget.attrs['style'] = 'display: none;'
     # print(f'formset: {formset}')
+    categories: List[Category] = Category.objects.all()
     return render(request, 'category/edit.html',
-                  {'category_form': category_form, 'category': category})
+                  {'category_form': category_form, 'category': category, 'categories': categories})

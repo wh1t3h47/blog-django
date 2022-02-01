@@ -1,8 +1,10 @@
+from typing import List
 from django import forms
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from FreiRui.admin.post_forms import PostForm
+from FreiRui.models.Category import Category
 from FreiRui.models.Post import Post
 
 
@@ -30,5 +32,6 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
             'galleries': [str(x) for x in [*post.galleries.all()]]
         }
     # print(f'formset: {formset}')
+    categories: List[Category] = Category.objects.all()
     return render(request, 'post/edit.html',
-                  {'post_form': post_form, 'default_values': default_values})
+                  {'post_form': post_form, 'default_values': default_values, 'categories': categories})

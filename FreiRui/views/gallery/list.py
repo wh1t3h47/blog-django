@@ -4,6 +4,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+from FreiRui.models.Category import Category
 from FreiRui.models.Gallery import Gallery
 from FreiRui.models.Images import Images
 from FreiRui.models.Post import Post
@@ -11,6 +12,7 @@ from FreiRui.models.Post import Post
 
 @login_required
 def gallery_list(request: HttpRequest) -> HttpResponse:
+    categories: List[Category] = Category.objects.all()
     posts: List[Post] = Post.objects.filter(
         category__published=True).order_by('published_date')
     posts_list = [*posts]
@@ -27,4 +29,4 @@ def gallery_list(request: HttpRequest) -> HttpResponse:
             pictures_in_post = [*pictures_in_post, *images_links]
         galleries.append(pictures_in_post)
     print(galleries)
-    return render(request, 'gallery/list.html', {'galleries': galleries})
+    return render(request, 'gallery/list.html', {'galleries': galleries, 'categories': categories})

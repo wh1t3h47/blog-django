@@ -1,13 +1,14 @@
 import json
-from typing import Union
+from typing import List, Union
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 
 from FreiRui.admin.edit_image_forms import EditImageForm
+from FreiRui.models.Category import Category
 from FreiRui.models.Gallery import Gallery
 from FreiRui.models.Images import Images
 
@@ -50,4 +51,5 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
     image_form.fields['images'].widget.attrs['style'] = "display: none;"
     picture = get_object_or_404(Images, image=picture_path)
     # print(f'formset: {formset}')
-    return render(request, 'picture/edit.html', {'image_form': image_form, 'picture': picture})
+    categories: List[Category] = Category.objects.all()
+    return render(request, 'picture/edit.html', {'image_form': image_form, 'picture': picture, 'categories': categories})

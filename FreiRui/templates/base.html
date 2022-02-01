@@ -1,4 +1,5 @@
 {% load static %}
+{% load next_item_for %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -39,7 +40,8 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.html">
-                    <img src="{% static 'logo.png' %}" width="170" height="170" alt="Legado Frei Rui, contornos do Frei Rui">
+                    <img src="{% static 'logo.png' %}" width="170" height="170"
+                        alt="Legado Frei Rui, contornos do Frei Rui">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -48,58 +50,35 @@
                 </button>
                 <div class="drop-fonts px-2 text-bg collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-                        </li>
+                        {% for category in categories %}
+                        {% if forloop.counter == 2 %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Quem Somos
+                                {{ category.name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="quem-somos.html">Quem Somos</a></li>
-                                <li><a class="dropdown-item" href="carisma-franciscano.html">Carisma Franciscano</a>
+                                <li>
+                                    <a class="dropdown-item" href="/{{ category.name | escapejs }}">
+                                        {{ category.name }}
+                                    </a>
                                 </li>
+                                <!-- assign next element to a variable -->
+                                {% with next_category=categories|next:forloop.counter0 %}
+                                <li>
+                                    <a class="dropdown-item" href="/{{ next_category.name | escapejs }}">
+                                        {{ next_category.name }}
+                                    </a>
+                                </li>
+                                {% endwith %}
                             </ul>
-
-
-
+                        </li>
+                        {% elif forloop.counter > 3 or forloop.counter == 1 %}
                         <li class="nav-item">
-                            <a class="nav-link" href="biografia.html">Biografia</a>
+                            <a class="nav-link" href="/{{ category.name | escapejs }}">{{ category.name }}</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="homilias.html">Homilias</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="textos.html">Textos</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="poesias.html">Poesias</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="depoimentos.html">Depoimentos</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="historias-frei-rui.html">Historias do Frei Rui</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="eventos.html">Eventos</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="acoes-culturais.html">Cultura</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="acoes-ajuda-ao-proximo.html">Ajuda ao proximo</a>
-                        </li>
-                        </li>
+                        {% endif %}
+                        {% endfor %}
                     </ul>
 
                 </div>

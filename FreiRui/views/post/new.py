@@ -24,6 +24,6 @@ def post_new(request: HttpRequest) -> ResponseOrRedirect:
             post.save()
             post_form.save_m2m()
             return HttpResponseRedirect(f"/{post_form.cleaned_data['category']}/{post.pk}")
-    else:
-        post_form = PostForm()
+    # else if request.method == "GET":
+    post_form = PostForm()
     return return_rendered_html_forms(request, post_form)
