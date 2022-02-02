@@ -221,6 +221,10 @@ footer {
   text-decoration: none;
 }
 
+.post-title {
+  color: #44364e;
+}
+
 .bg-light {
   background: #b7cde2 !important;
 }
@@ -276,12 +280,12 @@ label[for="id_listing_type"], label[for="id_galleries"] {
     font-size: 27px;
   }
 
-  .card-size {
-    width: 267px;
+  .centro-card {
+    display: flex;
   }
 
-  .centro-card {
-    display: block;
+  .card-body,.card-size {
+    width: 300px;
   }
 
   .text-footer {
