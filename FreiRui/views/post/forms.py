@@ -33,6 +33,6 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
             'galleries': [str(x) for x in [*post.galleries.all()]]
         }
     # print(f'formset: {formset}')
-    categories: List[Category] = Category.objects.all()
+    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     return render(request, 'post/edit.html',
                   {'post_form': post_form, 'default_values': default_values, 'categories': categories})

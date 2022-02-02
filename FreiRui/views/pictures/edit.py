@@ -51,5 +51,5 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
     image_form.fields['images'].widget.attrs['style'] = "display: none;"
     picture = get_object_or_404(Images, image=picture_path)
     # print(f'formset: {formset}')
-    categories: List[Category] = Category.objects.all()
+    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     return render(request, 'picture/edit.html', {'image_form': image_form, 'picture': picture, 'categories': categories})

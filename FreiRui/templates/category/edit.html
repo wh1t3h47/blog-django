@@ -53,9 +53,16 @@
     };
 
 </script>
-
-<input type="checkbox" onchange="flip()" id="accordion-listing"> Listagem em acordião? </input>
-<input type="checkbox" onchange="flip()" id="cards-listing"> Listagem em cartões? </input>
+<div style="display: flex; flex-direction: column; margin-top: 50px; margin-bottom: 20px;">
+    <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
+        <label for="accordion-listing">Listagem em acordião?</label>
+        <input type="checkbox" onchange="flip()" id="accordion-listing"></input>
+    </span>
+    <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
+        <label for="cards-listing">Listagem em cartões?</label>
+        <input type="checkbox" onchange="flip()" id="cards-listing"></input>
+    </span>
+</div>
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
     <div id="editor"></div>
 
@@ -65,6 +72,6 @@
 
     {% csrf_token %}
     {{ category_form.as_p }}
-    <input type="submit" name="submit" value="Submit" />
+    <input type="submit" name="submit" value="Salvar" />
 </form>
 {% endblock %}

@@ -34,6 +34,6 @@ def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     category_form.fields['published'].widget.attrs['checked'] = category.published
     category_form.fields['listing_type'].widget.attrs['style'] = 'display: none;'
     # print(f'formset: {formset}')
-    categories: List[Category] = Category.objects.all()
+    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     return render(request, 'category/edit.html',
                   {'category_form': category_form, 'category': category, 'categories': categories})

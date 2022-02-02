@@ -24,5 +24,5 @@ def category_new(request: HttpRequest) -> ResponseOrRedirect:
     # with the edit page and overwrites the actual published value.
     category_form.fields['published'].widget.attrs['checked'] = True
     category_form.fields['listing_type'].widget.attrs['style'] = 'display: none;'
-    categories: List[Category] = Category.objects.all()
+    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     return render(request, 'category/edit.html', {'category_form': category_form, 'categories': categories})

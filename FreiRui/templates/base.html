@@ -53,29 +53,67 @@
                         {% for category in categories %}
                         {% if forloop.counter == 2 %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ category.name }}
-                            </a>
+                            {% if user.is_authenticated %}
+                            <span style="display: flex; flex-direction: row; align-items: center; margin-left: 10px;">
+                                <a class="nav-link" href="{% url 'category_edit' pk=category.pk %}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ category.name }}
+                                </a>
+                                {% if user.is_authenticated %}
+                            </span>
+                            {% endif %}
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="/{{ category.name | escapejs }}">
-                                        {{ category.name }}
-                                    </a>
+                                    {% if user.is_authenticated %}
+                                    <span
+                                        style="display: flex; flex-direction: row; align-items: center; margin-left: 10px;">
+                                        <a class="nav-link" href="{% url 'category_edit' pk=category.pk %}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a class="dropdown-item" href="/{{ category.name | escapejs }}">
+                                            {{ category.name }}
+                                        </a>
+                                        {% if user.is_authenticated %}
+                                    </span>
+                                    {% endif %}
                                 </li>
                                 <!-- assign next element to a variable -->
                                 {% with next_category=categories|next:forloop.counter0 %}
                                 <li>
-                                    <a class="dropdown-item" href="/{{ next_category.name | escapejs }}">
-                                        {{ next_category.name }}
-                                    </a>
+                                    {% if user.is_authenticated %}
+                                    <span
+                                        style="display: flex; flex-direction: row; align-items: center; margin-left: 10px;">
+                                        <a class="nav-link" href="{% url 'category_edit' pk=next_category.pk %}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a class="dropdown-item" href="/{{ next_category.name | escapejs }}">
+                                            {{ next_category.name }}
+                                        </a>
                                 </li>
+                                {% if user.is_authenticated %}
+                                </span>
+                                {% endif %}
                                 {% endwith %}
                             </ul>
                         </li>
                         {% elif forloop.counter > 3 or forloop.counter == 1 %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/{{ category.name | escapejs }}">{{ category.name }}</a>
+                            {% if user.is_authenticated %}
+                            <span style="display: flex; flex-direction: row; align-items: center; margin-left: 10px;">
+                                <a class="nav-link" href="{% url 'category_edit' pk=category.pk %}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                <a class="nav-link" href="/{{ category.name | escapejs }}">{{ category.name }}</a>
+                                {% if user.is_authenticated %}
+                            </span>
+                            {% endif %}
                         </li>
                         {% endif %}
                         {% endfor %}

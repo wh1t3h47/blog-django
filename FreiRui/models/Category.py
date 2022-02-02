@@ -11,6 +11,7 @@ class Category(models.Model):
                         ] = models.CharField(max_length=10, default="cards")
     published = models.BooleanField()
     ''' Boolean, if not published, will hide the category from the menu. '''
+    order = models.IntegerField(default=0, verbose_name="Ordem da categoria na listagem")
 
     def __str__(self) -> str:
         return self.name
