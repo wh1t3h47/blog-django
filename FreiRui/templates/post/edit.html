@@ -270,6 +270,7 @@
         // Hack necessário para podermos criar uma galeria dentro da pasta de posts
         // sem salvar ou abandonar a página (fetch para fazer o post não funciona
         // por causa da proteção de CSRF, assim carregamos os forms num iframe)
+
         (async () => {
             const response = await fetch('/gallery/new/');
             const blob = await response.blob();
@@ -370,7 +371,7 @@
         });
         if (params.refresh) {
             setTimeout(() => {
-                
+
                 // remove refresh param
                 window.history.replaceState(
                     {},

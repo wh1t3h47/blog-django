@@ -32,7 +32,7 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
             post_form.save_m2m()
             # O usuário teria que ser administrador para conseguir redirecionar
             # e redirecionaria internamente apenas, não open redirection
-            # deepcode ignore OR: <>
+            # deepcode ignore OR: <Motivo acima>
             return HttpResponseRedirect(f"/{post_form.cleaned_data['category']}/{pk}")
         else:
             print(post_form.errors)

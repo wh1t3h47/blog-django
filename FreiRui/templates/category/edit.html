@@ -13,9 +13,15 @@
         if (newType === 'accordion') {
             document.getElementById('accordion-listing').checked = true;
             document.getElementById('cards-listing').checked = false;
-        } else {
+            document.getElementById('single-listing').checked = false;
+        } else if (newType === 'cards') {
             document.getElementById('cards-listing').checked = true;
             document.getElementById('accordion-listing').checked = false;
+            document.getElementById('single-listing').checked = false;
+        } else {
+            document.getElementById('single-listing').checked = true;
+            document.getElementById('accordion-listing').checked = false;
+            document.getElementById('cards-listing').checked = false;
         }
     };
     const setAccordion = () => {
@@ -24,21 +30,23 @@
     const setCards = () => {
         onChangeListingType('cards');
     };
-    const flip = () => {
-        if (window.listingType === 'accordion') {
-            setCards();
-        } else {
-            setAccordion();
-        }
+    const setSingle = () => {
+        onChangeListingType('single');
     };
+
     const isCheckedAccordion = () => {
         return window.listingType === 'accordion';
     };
     const isCheckedCards = () => {
         return window.listingType === 'cards';
     };
+    const isCheckedSingle = () => {
+        return window.listingType === 'single';
+    };
 
-    window.flip = flip;
+    window.setAccordion = setAccordion;
+    window.setCards = setCards;
+    window.setSingle = setSingle;
     window.isCheckedAccordion = isCheckedAccordion;
     window.isCheckedCards = isCheckedCards;
     window.listingType = listingType;
@@ -47,8 +55,10 @@
     window.onload = () => {
         if (window.listingType === 'accordion') {
             setAccordion();
-        } else {
+        } else if (window.listingType === 'cards') {
             setCards();
+        } else {
+            setSingle();
         }
     };
 
@@ -56,18 +66,22 @@
 <div style="display: flex; flex-direction: column; margin-top: 50px; margin-bottom: 20px;">
     <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
         <label for="accordion-listing">Listagem em acordião?</label>
-        <input type="checkbox" onchange="flip()" id="accordion-listing"></input>
+        <input type="checkbox" onchange="setAccordion();" id="accordion-listing"></input>
     </span>
     <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
         <label for="cards-listing">Listagem em cartões?</label>
-        <input type="checkbox" onchange="flip()" id="cards-listing"></input>
+        <input type="checkbox" onchange="setCards();" id="cards-listing"></input>
+    </span>
+    <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
+        <label for="single-listing">Listar post único?</label>
+        <input type="checkbox" onchange="setSingle();" id="single-listing"></input>
     </span>
 </div>
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
     <div id="editor"></div>
 
     {% if not category.published %}
-    <p>category not published :^(</p>
+    <p>Categoria não publicada (não aparece no menu nem tem posts)</p>
     {% endif %}
 
     {% csrf_token %}

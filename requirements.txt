@@ -15,3 +15,7 @@ pytz
 six
 sqlparse
 django-markdown-deux
+facebook-sdk
+django-environ
+python-social-auth
+social-auth-app-django

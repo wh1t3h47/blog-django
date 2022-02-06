@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<span style="display: flex; flex-direction: row; justify-content: space-evenly;">
+<a href="{% url 'post_new' %}" class="top-menu" style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">      <i class="far fa-plus-square fa-5x"></i>
+    <p> criar postagem </p>
+</a>
+<a href="{% url 'category_new' %}" class="top-menu" style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">      <i class="far fa-plus-square fa-5x"></i>
+    <p> Criar Categoria </p>
+</a>
+</span>
+{% endif %}
+<section>
+    <div style="padding-bottom: 30px; padding-top: 30px;" class="d-flex justify-content-center h1-quemsomos">
+        <h1>
+            {{ category.title }}
+        </h1>
+    </div>
+
+    {% for post in posts %}
+    <div class="d-flex title-homilias flex-column align-items-center justify-content-center">
+        <span class="span-padding">
+            {{ post.title }}
+        </span>
+        <hr style="color: #544f4f; width: 450px;">
+
+        <div class="btn-custom">
+            <button class="button-bb"
+                onclick="(() => window.location.href = `{% url 'post_details' category=post.category pk=post.pk %}`)()">
+                Ler {{ post.category.short_name }}
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+
+</section>
+{% endblock %}

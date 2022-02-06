@@ -223,13 +223,17 @@ footer {
 
 .post-title {
   color: #44364e;
+  text-align: center;
+  height: auto;
+  min-height: 50px;
 }
 
 .bg-light {
   background: #b7cde2 !important;
 }
 
-label[for="id_listing_type"], label[for="id_galleries"] {
+label[for="id_listing_type"],
+label[for="id_galleries"] {
   display: none;
 }
 
@@ -246,6 +250,15 @@ label[for="id_listing_type"], label[for="id_galleries"] {
   justify-content: space-between;
   width: 70%;
   align-self: center;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  margin-top: auto;
 }
 
 /* // Dispositivos extra small (telefones em modo retrato, com menos de 576px) */
@@ -284,8 +297,10 @@ label[for="id_listing_type"], label[for="id_galleries"] {
     display: flex;
   }
 
-  .card-body,.card-size {
+  .card-body,
+  .card-size {
     width: 300px;
+    height: 180px;
   }
 
   .text-footer {

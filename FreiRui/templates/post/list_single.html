@@ -5,11 +5,23 @@
 
 {% if user.is_authenticated %}
 <span style="display: flex; flex-direction: row; justify-content: space-evenly;">
-    <a href="{% url 'post_edit' pk=post.pk %}" class="top-menu" style="margin-top: 50px; text-align: center;"> <i
+    <a href="{% url 'post_edit' pk=posts.pk %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;"> <i
             class="fas fa-edit fa-5x"></i>
-        <p> Editar postagem </p>
+        <p> Editar post </p>
+    </a>
+    <a href="{% url 'post_new' %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;"> <i
+            class="far fa-plus-square fa-5x"></i>
+        <p> criar postagem </p>
+    </a>
+    <a href="{% url 'category_new' %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;"> <i
+            class="far fa-plus-square fa-5x"></i>
+        <p> Criar Categoria </p>
     </a>
 </span>
+
 
 <script>
     const oldWindowOnload = window.onload;
@@ -37,35 +49,20 @@
             image_div.appendChild(edit_button);
             image.replaceWith(image_div);
         });
-
-        // recarrega a página se uma imagem tiver sido editada para previnir cache antigo
-
-        const params = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        });
-        if (params.refresh) {
-            setTimeout(() => {
-
-                // remove refresh param
-                window.history.replaceState(
-                    {},
-                    document.title,
-                    window.location.pathname,
-                );
-                location.reload(true);
-            }, 200);
-        }
     };
 </script>
 {% endif %}
 
-<div class="post">
-    {% if post.published_date %}
-    <div class="date">
-        {{ post.published_date }}
+<section>
+    <div style="padding-bottom: 30px; padding-top: 30px;" class="d-flex justify-content-center h1-quemsomos">
+        <h1>
+            {{ posts.title }}
+        </h1>
     </div>
-    {% endif %}
-    <h2>{{ post.title }}</h2>
-    <p class="post-cruncher">{{ post.text | markdown:"safe" }}</p>
-</div>
+
+    <div class="p-text-center">
+        <p class="post-cruncher">{{ posts.text | markdown:"safe" }}</p>
+    </div>
+</section>
+
 {% endblock %}

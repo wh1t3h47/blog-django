@@ -33,6 +33,9 @@ def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     category_form.fields['name'].widget.attrs['value'] = category.name
     category_form.fields['published'].widget.attrs['checked'] = category.published
     category_form.fields['listing_type'].widget.attrs['style'] = 'display: none;'
+    category_form.fields['order'].widget.attrs['value'] = category.order
+    category_form.fields['short_name'].widget.attrs['value'] = category.short_name
+    category_form.fields['title'].widget.attrs['value'] = category.title
     # print(f'formset: {formset}')
     categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     return render(request, 'category/edit.html',

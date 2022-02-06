@@ -123,12 +123,33 @@
             </div>
         </nav>
     </header>
-    <div class="content container">
+    <div class="content container" style="height: auto; min-height: 100%;">
         <div class="row">
             {% block content %}
             {% endblock %}
         </div>
     </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 text-footer">
+                    <span>Legado Frei Rui Guido Depiné | 2021
+                    </span>
+                </div>
+                <div class="col-md-4 d-flex justify-content-end icons-footer">
+                    <a href="https://www.facebook.com/Legado-do-Frei-Rui-Depin%C3%A9-101772318808572/"
+                        class="btn btn-outline">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+
+                    <a href="https://www.youtube.com/channel/UCNC-pWwv7UpVAOZ9nBH7-HA" class="btn btn-outline ml-2">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 
 </html>

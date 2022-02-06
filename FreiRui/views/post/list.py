@@ -16,7 +16,10 @@ def post_list(request: HttpRequest, category: str) -> HttpResponse:
         category__published=True,
         is_deleted=False,
         published_date__lte=timezone.now()).order_by('published_date')
-    post_type: Union[Literal['cards'], Literal['accordion']] = 'cards'
+    post_type: Union[Literal['cards'], Literal['accordion'], Literal['single']] = 'cards'
     if category.listing_type == 'accordion':
         post_type = 'accordion'
+    elif category.listing_type == 'single':
+        post_type = 'single'
+        posts: Post = posts[0]
     return render(request, f'post/list_{post_type}.html', {'posts': posts, 'categories': categories})
