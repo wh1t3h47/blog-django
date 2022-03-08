@@ -12,9 +12,13 @@ from FreiRui.models.Post import Post
 
 @login_required
 def gallery_list(request: HttpRequest) -> HttpResponse:
-    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
-    posts: List[Post] = Post.objects.filter(
+    if (request.user.is_authenticated):
+        categories: List[Category] = Category.objects.order_by('order')
+        posts: List[Post] = Post.objects.order_by('published_date')
+    else:
+        posts: List[Post] = Post.objects.filter(
         category__published=True).order_by('published_date')
+        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     posts_list = [*posts]
     galleries: List[List[str]] = []
 

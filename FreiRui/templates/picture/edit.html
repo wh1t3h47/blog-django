@@ -42,7 +42,7 @@
 
         const formData = new FormData();
         formData.append('images', dataURLtoFile(canvas.toDataURL('image/png')));
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token | escapejs }}');
         (async () => {
             const response = await fetch('./', {
                 method: 'POST',
@@ -94,8 +94,6 @@
 <form id="post_form" method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {{ image_form.as_p }}
-    <!-- img src="/media/{{ picture.image }}" alt="{{ picture.image }}" width="200" onclick="ImageEditorOpen()" />
-    <p> Clique na imagem para editar... </p -->
     <input type="submit" name="submit" value="Submit" style="display: none;" />
 </form>
 {% endblock %}

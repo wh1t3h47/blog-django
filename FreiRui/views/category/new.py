@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from FreiRui.admin.category_forms import CategoryForm
 from FreiRui.models.Category import Category
@@ -14,15 +15,31 @@ ResponseOrRedirect = Union[HttpResponse,
 
 @login_required
 def category_new(request: HttpRequest) -> ResponseOrRedirect:
+    default_fields = {'order': 0}
     if request.method == "POST":
         category_form = CategoryForm(request.POST)
         if category_form.is_valid():
-            category_form.save()
+            # save but dont commit
+            category: Category = category_form.save(commit=False)
+            category.name = str.replace(category.name, '/', '')
+            category.name = str.replace(category.name, '_', '')
+            categories_matching_name = Category.objects.filter(name=category.name).count()
+            if categories_matching_name > 0:
+                messages.error(request, 'Category name already exists')
+                if (request.user.is_authenticated):
+                    categories: List[Category] = Category.objects.order_by('order')
+                else:
+                    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+                return render(request, 'category/edit.html', {'category_form': category_form, 'category': category, 'categories': categories, 'failed_category_exists': True})
+            category.save()
             return redirect('category_edit', pk=category_form.instance.pk)
     category_form = CategoryForm()
     # Default value, this is not set in the model because it interferes
     # with the edit page and overwrites the actual published value.
     category_form.fields['published'].widget.attrs['checked'] = True
     category_form.fields['listing_type'].widget.attrs['style'] = 'display: none;'
-    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
-    return render(request, 'category/edit.html', {'category_form': category_form, 'categories': categories})
+    if (request.user.is_authenticated):
+        categories: List[Category] = Category.objects.order_by('order')
+    else:
+        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+    return render(request, 'category/edit.html', {'category_form': category_form, 'categories': categories, 'category': default_fields})

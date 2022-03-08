@@ -3,24 +3,32 @@
 {% block content %}
 {% if user.is_authenticated %}
 <span style="display: flex; flex-direction: row; justify-content: space-evenly;">
-<a href="{% url 'post_new' %}" class="top-menu" style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">      <i class="far fa-plus-square fa-5x"></i>
-    <p> criar postagem </p>
-</a>
-<a href="{% url 'category_new' %}" class="top-menu" style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">      <i class="far fa-plus-square fa-5x"></i>
-    <p> Criar Categoria </p>
-</a>
+    <a href="{% url 'post_new' %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
+        <i class="far fa-plus-square fa-5x"></i>
+        <p> criar postagem </p>
+    </a>
+    <a href="{% url 'category_new' %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
+        <i class="far fa-plus-square fa-5x"></i>
+        <p> Criar Categoria </p>
+    </a>
 </span>
 {% endif %}
 <section>
     <div style="padding-bottom: 30px; padding-top: 30px;" class="d-flex justify-content-center h1-quemsomos">
-        <h1>
+        <h2>
             {{ category.title }}
-        </h1>
+        </h2>
     </div>
 
     {% for post in posts %}
-    <div class="d-flex title-homilias flex-column align-items-center justify-content-center">
+    <div
+        class="d-flex title-homilias flex-column align-items-center justify-content-center {% if post.is_deleted %} text-danger {% endif %}">
         <span class="span-padding">
+            {% if post.published_date > now %}
+            <i class="far fa-clock text-danger"></i>
+            {% endif %}
             {{ post.title }}
         </span>
         <hr style="color: #544f4f; width: 450px;">

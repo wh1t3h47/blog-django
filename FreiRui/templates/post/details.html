@@ -5,8 +5,8 @@
 
 {% if user.is_authenticated %}
 <span style="display: flex; flex-direction: row; justify-content: space-evenly;">
-    <a href="{% url 'post_edit' pk=post.pk %}" class="top-menu" style="margin-top: 50px; text-align: center;"> <i
-            class="fas fa-edit fa-5x"></i>
+    <a href="{% url 'post_edit' pk=post.pk %}" class="top-menu" style="margin-top: 50px; text-align: center;">
+        <i class="fas fa-edit fa-5x"></i>
         <p> Editar postagem </p>
     </a>
 </span>
@@ -61,11 +61,11 @@
 
 <div class="post">
     {% if post.published_date %}
-    <div class="date">
+    <div class="date" style="display: none;">
         {{ post.published_date }}
     </div>
     {% endif %}
-    <h2>{{ post.title }}</h2>
+    <h2 style="display: none;">{{ post.title }}</h2>
     <p class="post-cruncher">{{ post.text | markdown:"safe" }}</p>
 </div>
 {% endblock %}

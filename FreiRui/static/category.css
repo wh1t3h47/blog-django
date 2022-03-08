@@ -1,0 +1,163 @@
+ul {
+  list-style-type: none;
+}
+
+li {
+  display: inline-block;
+}
+
+input[type="checkbox"][id^="myCheckbox"] {
+  display: none;
+}
+
+.img-checkvf {
+    display: flex;
+    margin-bottom: 80px;
+}
+
+/* Dispositivos small (telefones em modo paisagem, com menos de 768px) */
+@media (max-width: 767.98px) {
+    .img-checkvf {
+        flex-direction: column;
+    }
+    .img-checkvf label img {
+        width: 300px !important;
+        place-items: center;
+    }
+}
+
+.img-checkvf label {
+
+  border: 1px solid #fff;
+  padding: 10px;
+  display: block;
+  position: relative;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.img-checkvf label:before {
+  background-color: white;
+  color: white;
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  border: 1px solid grey;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 28px;
+  transition-duration: 0.4s;
+  transform: scale(0);
+}
+
+.img-checkvf label img {
+  width: 14vw;
+  transition-duration: 0.2s;
+  transform-origin: 50% 50%;
+}
+
+.img-checkvf:checked + label {
+  border-color: #ddd;
+}
+
+.img-checkvf :checked + label:before {
+  content: "\2714";
+  background-color: grey;
+  transform: scale(1);
+}
+
+.img-checkvf :checked + label img {
+  transform: scale(0.9);
+  /* box-shadow: 0 0 5px #333; */
+  z-index: -1;
+}
+
+.img-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.centro-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.post-form {
+  width: 80%;
+  max-width: 750px;
+}
+
+.input-form {
+  margin: 3px auto;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.botao-salvar {
+  background: #2264ac;
+  height: 45px;
+  border: none;
+  border-radius: 100px;
+  padding: 0px 23px;
+  animation: 1s ease 0s 1 normal forwards running lbWRkT;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  box-shadow: rgb(0 0 0 / 10%) 0px 20px 25px -5px, rgb(0 0 0 / 3%) 0px 10px 10px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  margin-top: 18px;
+}
+
+.botao-position {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.published {
+  margin-top: 25px;
+  margin-right: 8px;
+  margin-bottom: 18px;
+  margin-left: 50px;
+}
+
+.spaceinput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.form-check {
+  margin-bottom: 0;
+}
+
+.form-check .form-check-input {
+  float: right;
+}
+
+.labelposition {
+  margin: -82px;
+}
+
+.text-danger {
+  margin: 8px;
+  margin-bottom: 10px;
+}

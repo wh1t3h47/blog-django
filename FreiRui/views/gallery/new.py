@@ -39,5 +39,8 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
         return HttpResponse(status=422)
     # else if request.method == "GET":
     form = ImageForm()
-    categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+    if (request.user.is_authenticated):
+        categories: List[Category] = Category.objects.order_by('order')
+    else:
+        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
     return render(request, 'gallery/new.html', {'form': form, 'categories': categories})

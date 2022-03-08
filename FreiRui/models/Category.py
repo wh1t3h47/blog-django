@@ -7,13 +7,14 @@ CATEGORY_LENGTH = 30
 class Category(models.Model):
     ''' A category is a group of posts that will be avaliable in the navbar '''
     name = models.CharField(max_length=CATEGORY_LENGTH, verbose_name="Nome (barra de ferramentas)")
-    short_name = models.CharField(max_length=CATEGORY_LENGTH, verbose_name="Nome curto (singular)")
-    title = models.CharField(max_length=255, verbose_name="Título (página)")
-    listing_type: Union[Literal['accordion'], Literal['cards'], Literal['single']
+    short_name = models.CharField(max_length=CATEGORY_LENGTH, verbose_name="Nome curto (singular)", blank=True)
+    title = models.CharField(max_length=255, verbose_name="Título (página)", blank=True)
+    listing_type: Union[Literal['accordion'], Literal['cards'], Literal['single'], Literal['youtube']
                         ] = models.CharField(max_length=10, default="cards")
-    published = models.BooleanField()
+    published = models.BooleanField(verbose_name="Publicado", default=True)
     ''' Boolean, if not published, will hide the category from the menu. '''
     order = models.IntegerField(default=0, verbose_name="Ordem da categoria na listagem")
+    video_url = models.CharField(max_length=255, blank=True, null=True, verbose_name="ID do canal do YouTube")
 
     def __str__(self) -> str:
         return self.name

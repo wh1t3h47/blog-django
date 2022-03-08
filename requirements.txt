@@ -17,5 +17,11 @@ sqlparse
 django-markdown-deux
 facebook-sdk
 django-environ
-python-social-auth
 social-auth-app-django
+facepy
+django-crontab
+beautifulsoup4
+markdown
+requests
+requests-cache
+django-request

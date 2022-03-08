@@ -22,6 +22,7 @@ environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,9 +32,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
+DEBUG = True if (DEBUG == 'True' or DEBUG == 'true' or DEBUG == '1') else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [env('HOST')]
 
 
 # Application definition
@@ -46,18 +48,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'markdown_deux',
-    'social.apps.django_app.default',
+    'social_django',
+    'django_crontab',
+    'request',
     'FreiRui',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'request.middleware.RequestMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'FreiRui.urls'
@@ -65,7 +72,7 @@ ROOT_URLCONF = 'FreiRui.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,8 +80,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -116,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -145,7 +152,48 @@ MEDIA_URL = '/media/'
 # Path where media is stored</span>
 MEDIA_ROOT = join(BASE_DIR, 'media/')
 
+# Social Auth configuration
 AUTHENTICATION_BACKENDS = (
-   'social.backends.facebook.FacebookOAuth2',
-   'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# LOGIN_URL = 'login'
+# LOGOUT_URL = 'logout'
+# LOGIN_REDIRECT_URL = 'home'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+SOCIAL_AUTH_FACEBOOK_KEY = env('FB_APP_ID')
+SOCIAL_AUTH_FACEBOOK_SECRET = env('FB_APP_SECRET')
+
+# Schedule social media posts
+CRONJOBS = [
+    ('*/2 * * * *', 'FreiRui.cron.post_to_social_media'),
+]
+
+REQUEST_BASE_URL = 'https://freiruidepine.com.br'
+REQUEST_IGNORE_USER_AGENTS = (
+    r'^$', # ignore requests with no user agent string set
+    r'Googlebot',
+    r'Baiduspider',
+)
+REQUEST_PLUGINS = (
+    'request.plugins.TrafficInformation',
+    'request.plugins.LatestRequests',
+    'request.plugins.TopPaths',
+    'request.plugins.TopErrorPaths',
+    'request.plugins.TopReferrers',
+    'request.plugins.TopSearchPhrases',
+    'request.plugins.TopBrowsers',
+)
+REQUEST_TRAFFIC_MODULES = (
+'request.traffic.UniqueVisitor',
+'request.traffic.UniqueVisit',
+'request.traffic.Hit',
+'request.traffic.Error',
+)
+REQUEST_VALID_METHOD_NAMES = (
+    'get',
 )

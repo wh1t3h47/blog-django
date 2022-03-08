@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load request_tag %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --primary: #b7cde2;
+        --secondary: #b7cde2;
+        --link-fg: #2364ac;
+        --link-selected-fg: #44364e;
+        --accent: #2364ac;
+        --header-color: #2364ac;
+        --header-link-color: #2364ac;
+        --breadcrumbs-link-fg: #2364ac;
+        --breadcrumbs-fg: #44364e;
+        --selected-row: #eeeeee;
+        --object-tools-bg: #2264ac;
+        --object-tools-hover-bg: #3f8ad9;
+        --button-bg: #2264ac;
+        --button-hover-bg: #3f8ad9;
+    }
+
+    #user-tools a:focus, #user-tools a:hover {
+        color: var(--button-hover-bg);
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<style>
+    .header {
+        background-color: #b7cde2 !important;
+    }
+</style>
+<img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+{% active_users in 10 minutes as user_list %}
+{% for user in user_list %}
+{{ user.username }}
+{% endfor %}
+<p>gayyyyyyyyyyy</p>
+{% endblock %}

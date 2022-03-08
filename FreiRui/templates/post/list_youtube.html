@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<span style="display: flex; flex-direction: row; justify-content: space-evenly;">
+    <a href="{% url 'category_edit' pk=category.pk %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
+        <i class="far fa-plus-square fa-5x"></i>
+        <p> Editar Feed </p>
+    </a>
+    <a href="{% url 'category_new' %}" class="top-menu"
+        style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
+        <i class="far fa-plus-square fa-5x"></i>
+        <p> Criar Categoria </p>
+    </a>
+</span>
+{% endif %}
+
+<style>
+    .videos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+        gap: 20px;
+        grid-auto-rows: minmax(100px, auto);
+        place-items: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<script>
+    const onLoadcallback = window.onload;
+    window.onload = () => {
+        if (onLoadcallback) {
+            onLoadcallback();
+        }
+        const youtube_rss = '{{ youtube_rss | escapejs }}';
+        const rss = new window.DOMParser().parseFromString(youtube_rss, "text/xml");
+        const entries = rss.getElementsByTagName('entry');
+        const videos = document.getElementById('videos');
+        window.entries = entries;
+        for (const entry of entries) {
+            const video = (entry.getElementsByTagName('yt:videoId') || [])[0]?.innerHTML;
+            if (video) {
+                const iframe = document.createElement('iframe');
+                iframe.width = 640;
+                iframe.height = 360;
+                iframe.src = `https://www.youtube.com/embed/${video}`;
+                iframe.title = "Video do YouTube";
+                iframe.frameborder = 0;
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                iframe.allowfullscreen = true;
+                // iframe.style.padding = "10px";
+                videos.appendChild(iframe);
+            }
+        }
+    }
+</script>
+
+<section>
+    <div style="padding-bottom: 30px; padding-top: 30px;" class="d-flex justify-content-center h1-quemsomos">
+        <h2>
+            {{ category.title }}
+        </h2>
+    </div>
+    <div id="videos" class="videos"></div>
+</section>
+
+{% endblock %}

@@ -1,34 +1,82 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-
 <script>
-    /** @type {'accordion' | 'cards'} */
+    /** @type {'accordion' | 'cards' | 'single' | 'youtube'} */
     let listingType = '{{ category.listing_type | escapejs }}';
 
+    /**
+     * @typedef {'accordion' | 'cards' | 'single' | 'youtube'} ListingType
+     * @param {ListingType} newType
+     * @param {ListingType} hideOnType
+     * @param {string} id
+     * @param {boolean} hide
+     */
+    const toggleFormDisplay = (id, newType, hideOnType, hide) => {
+        const form = document.querySelectorAll(`[for="${id}"], #${id}, .${id}`);
+        for (const element of form) {
+            if (hide) {
+                element.style.display = newType === hideOnType ? 'none' : '';
+                element.parentElement.style.display = newType === hideOnType ? 'none' : '';
+            } else {
+                element.style.display = newType === hideOnType ? '' : 'none';
+                element.parentElement.style.display = newType === hideOnType ? '' : 'none';
+            }
+        }
+    };
+    /**
+     * @typedef {'accordion' | 'cards' | 'single' | 'youtube'} ListingType
+     * @param {ListingType} newType
+     * @param {string} id
+     * @param {ListingType} hideOnType
+     */
+    const hideForm = (id, newType, hideOnType) => {
+        toggleFormDisplay(id, newType, hideOnType, true);
+    };
+    /**
+ * @typedef {'accordion' | 'cards' | 'single' | 'youtube'} ListingType
+ * @param {ListingType} newType
+ * @param {string} id
+ * @param {ListingType} showOnType
+ */
+    const showForm = (id, newType, hideOnType) => {
+        toggleFormDisplay(id, newType, hideOnType, false);
+    };
+
+    /**
+     * @param {'accordion' | 'cards' | 'single' | 'youtube'} newType
+     */
+    const setCheckboxes = (newType) => {
+        document.getElementById('accordion-listing').checked = newType === 'accordion';
+        document.getElementById('cards-listing').checked = newType === 'cards';
+        document.getElementById('youtube-listing').checked = newType === 'youtube';
+        document.getElementById('single-listing').checked = newType === 'single';
+        showForm('id_video_url', newType, 'youtube');
+        hideForm('id_short_name', newType, 'youtube');
+        hideForm('id_title', newType, 'single');
+        if (newType === 'single') {
+            hideForm('id_short_name', newType, 'single');
+        }
+    }
+
+    /**
+     * @param {'accordion' | 'cards' | 'single' | 'youtube'} newType
+     */
     const onChangeListingType = (newType) => {
         window.listingType = newType;
         const listingTypeInput = document.getElementById('id_listing_type');
         listingTypeInput.value = newType;
-        if (newType === 'accordion') {
-            document.getElementById('accordion-listing').checked = true;
-            document.getElementById('cards-listing').checked = false;
-            document.getElementById('single-listing').checked = false;
-        } else if (newType === 'cards') {
-            document.getElementById('cards-listing').checked = true;
-            document.getElementById('accordion-listing').checked = false;
-            document.getElementById('single-listing').checked = false;
-        } else {
-            document.getElementById('single-listing').checked = true;
-            document.getElementById('accordion-listing').checked = false;
-            document.getElementById('cards-listing').checked = false;
-        }
+        setCheckboxes(newType);
     };
     const setAccordion = () => {
         onChangeListingType('accordion');
     };
     const setCards = () => {
         onChangeListingType('cards');
+    };
+    const setYoutube = () => {
+        onChangeListingType('youtube');
     };
     const setSingle = () => {
         onChangeListingType('single');
@@ -40,16 +88,22 @@
     const isCheckedCards = () => {
         return window.listingType === 'cards';
     };
+    const isCheckedYoutube = () => {
+        return window.listingType === 'youtube';
+    };
     const isCheckedSingle = () => {
         return window.listingType === 'single';
     };
 
     window.setAccordion = setAccordion;
     window.setCards = setCards;
+    window.setYoutube = setYoutube;
     window.setSingle = setSingle;
+    window.listingType = listingType;
     window.isCheckedAccordion = isCheckedAccordion;
     window.isCheckedCards = isCheckedCards;
-    window.listingType = listingType;
+    window.isCheckedYoutube = isCheckedYoutube;
+    window.isCheckedSingle = isCheckedSingle;
 
     const oldWindowOnload = window.onload;
     window.onload = () => {
@@ -57,35 +111,134 @@
             setAccordion();
         } else if (window.listingType === 'cards') {
             setCards();
+        } else if (window.listingType === 'youtube') {
+            setYoutube();
         } else {
             setSingle();
         }
+
+
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
     };
 
+    const addCss = (fileName) => {
+        const { head } = document;
+        const link = document.createElement('link');
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
+        link.href = fileName;
+        head.appendChild(link);
+    };
+
+    const categoryStylesheet = "{% static 'category.css' %}";
+    addCss(categoryStylesheet);
 </script>
-<div style="display: flex; flex-direction: column; margin-top: 50px; margin-bottom: 20px;">
-    <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
-        <label for="accordion-listing">Listagem em acordião?</label>
-        <input type="checkbox" onchange="setAccordion();" id="accordion-listing"></input>
-    </span>
-    <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
-        <label for="cards-listing">Listagem em cartões?</label>
-        <input type="checkbox" onchange="setCards();" id="cards-listing"></input>
-    </span>
-    <span style="display: flex; justify-content: space-between; align-items: center; width: 20%;">
-        <label for="single-listing">Listar post único?</label>
-        <input type="checkbox" onchange="setSingle();" id="single-listing"></input>
-    </span>
+
+<h4 style="text-align: center; padding: 20px;"> Tipo de listagem: </h4>
+
+<div class="img-centro">
+    <ul class="img-checkvf">
+        <li>
+            <input type="checkbox" onchange="setAccordion();" id="accordion-listing">
+            <label for="accordion-listing"><img src="{% static 'accordion.png' %}"></label>
+        </li>
+        <li>
+
+            <input type="checkbox" onchange="setCards();" id="cards-listing">
+            <label for="cards-listing"><img src="{% static 'cards.png' %}"></label>
+        </li>
+        <li>
+
+            <input type="checkbox" onchange="setSingle();" id="single-listing">
+            <label for="single-listing"><img src="{% static 'single.png' %}"></label>
+        </li>
+        <li>
+
+            <input type="checkbox" onchange="setYoutube();" id="youtube-listing">
+            <label for="youtube-listing"><img src="{% static 'youtube.png' %}"></label>
+        </li>
+    </ul>
 </div>
-<form id="post_form" method="post" action="" enctype="multipart/form-data">
-    <div id="editor"></div>
 
-    {% if not category.published %}
-    <p>Categoria não publicada (não aparece no menu nem tem posts)</p>
-    {% endif %}
+<div id="editor"></div>
 
-    {% csrf_token %}
-    {{ category_form.as_p }}
-    <input type="submit" name="submit" value="Salvar" />
-</form>
+<div class="centro-form">
+    <form id="post_form" class="post-form" method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="editor"></div>
+        <p class="spaceinput">
+            <label for="id_name">Nome (barra de navegação):</label>
+            <a class="id_name text-inherit mr-3 fas fa-question-circle id_name" data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Nome da categoria que vai aparecer na barra de navegação em cima e que leva a página contendo as postagens (exemplo: Histórias do Frei Rui)."></a>
+        </p>
+        {% if failed_category_exists %}
+        <p class="text-danger" role="alert">
+            <strong>Erro!</strong> Já existe uma categoria com esse nome.
+        </p>
+        {% endif %}
+        <div>
+            <input value="{{ category.name }}" class="input-form" type="text" name="name" maxlength="30" required=""
+                id="id_name">
+        </div>
+        <p class="spaceinput">
+            <label for="id_order">
+                Ordem (barra de navegação):</label>
+            <a class="id_order text-inherit mr-3 fas fa-question-circle id_name" data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Ordem em que o elemento aparece na barra de navegação em cima, quanto menor esse número, mais a esquerda a categoria aparece."></a>
+        </p>
+        <div>
+            <input value="{{ category.order }}" class="input-form" type="number" name="order" value="0" required=""
+                id="id_order">
+        </div>
+        <p class="spaceinput">
+            <label for="id_short_name">Nome curto:</label>
+            <a class="id_short_name text-inherit mr-3 fas fa-question-circle id_name" data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Esse nome é utilizado para gerar o botão que vai levar à postagem, por exemplo, se for Texto, o botão vai estar escrito “Ler texto”"></a>
+        </p>
+        <div>
+            <input value="{{ category.short_name }}" class="input-form" type="text" name="short_name" maxlength="30"
+                id="id_short_name">
+        </div>
+        <p class="spaceinput">
+            <label for="id_title">Título: </label>
+            <a class="text-inherit mr-3 fas fa-question-circle id_name" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Esse título é utilizado para apresentar a página que lista a postagens, geralmente ele está no plural, por exemplo, “Histórias do Frei Rui”"></a>
+        </p>
+        <div>
+            <input value="{{ category.title }}" class="input-form" type="text" name="title" maxlength="30"
+                id="id_title">
+        </div>
+        <p class="spaceinput">
+            <label for="id_video_url">ID do canal do YouTube:</label>
+            <a class="text-inherit mr-3 fas fa-question-circle id_name" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="O ID do canal que deseja mostrar os vídeos, para obter esse ID, abra o canal do YouTube, então copie a parte que está depois de /channel/, até chegar na próxima barra (se tiver), mas sem incluir a barra, por exemplo, para o link “https://www.youtube.com/channel/UCNC-pWwv7UpVAOZ9nBH7-HA/featured”, o ID do canal vai ser “UCNC-pWwv7UpVAOZ9nBH7-HA”"></a>
+        </p>
+        <div>
+            <input value="{{ category.video_url }}" class="input-form" type="text" name="video_url" maxlength="255"
+                id="id_video_url">
+
+        </div>
+        <div class="form-check form-switch published">
+            <input {% if category.published %} checked="" {% endif %} class="form-check-input" type="checkbox" id="id_published"
+                name="published">
+            <label class="form-check-label labelposition" for="id_published">Publicado:</label>
+        </div>
+        {% if category.published == False %}
+        <small class="text-danger">Categoria não publicada (não aparece no menu nem tem posts)</small>
+        {% endif %}
+        <p style="display: none;">
+            <label for="id_listing_type">Listing type:</label>
+            <input value="{{ category.listing_type }}" type="text" name="listing_type" value="cards" maxlength="10"
+                style="display: none;" required="" id="id_listing_type">
+        </p>
+        <div class="botao-position"><input class="botao-salvar" type="submit" name="submit" value="Salvar"></div>
+    </form>
+</div>
+
 {% endblock %}

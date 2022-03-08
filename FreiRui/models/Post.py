@@ -21,6 +21,8 @@ class Post(models.Model):
     published_date = models.DateTimeField(blank=True, null=True, verbose_name="Data de publicação (selecione no futuro para agendar)")
     galleries = models.ManyToManyField(Gallery, blank=True)
     is_deleted = models.BooleanField(default=False, verbose_name="Ocultado?")
+    instagram_posted = models.BooleanField(default=False)
+    facebook_posted = models.BooleanField(default=False)
 
     def publish(self):
         self.published_date = timezone.now()

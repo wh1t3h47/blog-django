@@ -23,6 +23,10 @@ urlpatterns += [
     path('admin/', admin.site.urls),
 ]
 
+admin.site.site_title = "Administração do Legado do Frei Rui"
+admin.site.site_header = "Administrar o Legado do Frei Rui"
+admin.site.index_title = "Opções Avançadas"
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
