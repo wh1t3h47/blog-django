@@ -32,5 +32,4 @@ def gallery_list(request: HttpRequest) -> HttpResponse:
                                        for image in all_images]
             pictures_in_post = [*pictures_in_post, *images_links]
         galleries.append(pictures_in_post)
-    print(galleries)
     return render(request, 'gallery/list.html', {'galleries': galleries, 'categories': categories})

@@ -43,6 +43,7 @@ def post_image_upload(request, pk: str):
         return HttpResponseRedirect(f"/post/{pk}")
     else:
         print(post_form.errors, formset.errors)
+        messages.error(request, "Image not uploaded")
     # print(f'formset: {formset}')
     return render(request, 'post/edit.html',
                   {'post_form': post_form, 'formset': formset})

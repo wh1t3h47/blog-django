@@ -32,6 +32,7 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
             return HttpResponseRedirect(f"/posts/{post_form.cleaned_data['category']}/{pk}")
         else:
             print(post_form.errors)
+            messages.error(request, "Post not updated")
     # print(f'formset: {formset}')
         return return_rendered_html_forms(request, post_form, pk)
 

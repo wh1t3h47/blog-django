@@ -19,17 +19,11 @@ Response = Union[HttpResponse, JsonResponse]
 @login_required
 def image_edit(request: HttpRequest, picture_path: str) -> Response:
     if request.method == "POST":
-        print('post')
         image_form = EditImageForm(request.POST, request.FILES)
         if image_form.is_valid():
-            print('valid')
             image = request.FILES.get('images')
-            print(picture_path)
             if image and image.size > 0:
-                print('image')
                 picture = get_object_or_404(Images, image=picture_path)
-                print(
-                    f"picture path: {picture.image.url}, request path: {picture_path}")
                 gallery: Gallery = picture.gallery
                 picture.image.delete()
                 picture.image = image
@@ -44,6 +38,7 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
                 return JsonResponse({'image': picture.image.url}, status=201)
         else:
             print(image_form.errors)
+            messages.error(request, "Image not updated")
     # else if request.method == "GET":
     image_form = EditImageForm()
     # disallow multiple files

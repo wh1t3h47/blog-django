@@ -6,8 +6,8 @@ from FreiRui.views.post.new import post_new
 from FreiRui.views.post.edit import post_edit
 
 urlpatterns = [
-    path('posts/<str:category>/', post_list, name='post_list'),
-    path('posts/<str:category>/<int:pk>/', post_details, name='post_details'),
-    path('post/new/', post_new, name='post_new'),
-    path('post/<int:pk>/edit/', post_edit, name='post_edit'),
+    path('postagens/<str:category>/', post_list, name='post_list'),
+    path('postagens/<str:category>/<int:pk>/', post_details, name='post_details'),
+    path('postagens/new/', post_new, name='post_new'),
+    path('postagens/<int:pk>/edit/', post_edit, name='post_edit'),
 ]
