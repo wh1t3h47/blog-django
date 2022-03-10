@@ -87,7 +87,7 @@
                                     {% endif %}
                                 </li>
                                 <!-- assign next element to a variable -->
-                                {% with next_category=category | next:forloop.counter0 %}
+                                {% with next_category=category|next:forloop.counter0 %}
                                 <li>
                                     {% if next_category.pk %}
                                     {% if user.is_authenticated %}

@@ -15,7 +15,7 @@ ResponseOrRedirect = Union[HttpResponse,
 
 @login_required
 def category_new(request: HttpRequest) -> ResponseOrRedirect:
-    default_fields = {'order': 0}
+    default_fields = {'order': 0, 'published': True}
     if request.method == "POST":
         category_form = CategoryForm(request.POST)
         if category_form.is_valid():
@@ -32,7 +32,7 @@ def category_new(request: HttpRequest) -> ResponseOrRedirect:
                     categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
                 return render(request, 'category/edit.html', {'category_form': category_form, 'category': category, 'categories': categories, 'failed_category_exists': True})
             category.save()
-            return redirect('category_edit', pk=category_form.instance.pk)
+            return redirect('post_list', category=category.name)
     category_form = CategoryForm()
     # Default value, this is not set in the model because it interferes
     # with the edit page and overwrites the actual published value.

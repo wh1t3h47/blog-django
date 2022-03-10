@@ -23,7 +23,7 @@ def post_new(request: HttpRequest) -> ResponseOrRedirect:
             post.published_date = timezone.now()
             post.save()
             post_form.save_m2m()
-            return HttpResponseRedirect(f"/posts/{post_form.cleaned_data['category']}/{post.pk}")
+            return HttpResponseRedirect(f"/postagens/{post_form.cleaned_data['category']}/{post.pk}")
     # else if request.method == "GET":
     post_form = PostForm()
     return return_rendered_html_forms(request, post_form)

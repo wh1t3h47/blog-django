@@ -2,15 +2,15 @@ from typing import List, Union
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 
 from FreiRui.admin.category_forms import CategoryForm
 from FreiRui.models.Categories import Categories
 
-ResponseOrRedirect = Union[HttpResponse, HttpResponseRedirect]
+ResponseOrRedirect = Union[HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect]
 
 
 @login_required
@@ -32,7 +32,7 @@ def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
                     categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
                 return render(request, 'category/edit.html', {'category_form': category_form, 'category': category, 'categories': categories, 'failed_category_exists': True})
             category.save()
-            return HttpResponseRedirect(f"/category/{pk}/edit")
+            return redirect('post_list', category=category.name)
         else:
             print(category_form.errors)
             messages.error(request, 'Invalid category form')

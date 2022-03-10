@@ -4,7 +4,7 @@ from django.http.response import HttpResponse
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
 from FreiRui.admin.post_forms import PostForm
@@ -26,10 +26,7 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
             saved_post_form.update_date = timezone.now()
             saved_post_form.save()
             post_form.save_m2m()
-            # O usuário teria que ser administrador para conseguir redirecionar
-            # e redirecionaria internamente apenas, não open redirection
-            # deepcode ignore OR: <Motivo acima>
-            return HttpResponseRedirect(f"/posts/{post_form.cleaned_data['category']}/{pk}")
+            return redirect('post_details', category=post_form.cleaned_data['category'], pk=pk)
         else:
             print(post_form.errors)
             messages.error(request, "Post not updated")
