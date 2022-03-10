@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_crontab',
     'request',
+    'smuggler',
     'FreiRui',
 ]
 
@@ -195,3 +196,8 @@ REQUEST_TRAFFIC_MODULES = (
 REQUEST_VALID_METHOD_NAMES = (
     'get',
 )
+REQUEST_IGNORE_AJAX = True
+REQUEST_IGNORE_PATHS = (
+    r'^admin/',
+)
+REQUEST_IGNORE_USERNAME = 'admin'

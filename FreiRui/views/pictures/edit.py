@@ -9,8 +9,8 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 
 from FreiRui.admin.edit_image_forms import EditImageForm
-from FreiRui.models.Category import Category
-from FreiRui.models.Gallery import Gallery
+from FreiRui.models.Categories import Categories
+from FreiRui.models.Galleries import Galleries
 from FreiRui.models.Images import Images
 
 Response = Union[HttpResponse, JsonResponse]
@@ -24,7 +24,7 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
             image = request.FILES.get('images')
             if image and image.size > 0:
                 picture = get_object_or_404(Images, image=picture_path)
-                gallery: Gallery = picture.gallery
+                gallery: Galleries = picture.gallery
                 picture.image.delete()
                 picture.image = image
                 # sinaliza para o modelo não gerar um novo nome para a imagem
@@ -48,7 +48,7 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
     picture = get_object_or_404(Images, image=picture_path)
     # print(f'formset: {formset}')
     if (request.user.is_authenticated):
-        categories: List[Category] = Category.objects.order_by('order')
+        categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
     return render(request, 'picture/edit.html', {'image_form': image_form, 'picture': picture, 'categories': categories})

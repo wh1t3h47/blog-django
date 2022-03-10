@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 
-from FreiRui.models.Post import Post
+from FreiRui.models.Posts import Posts
 from ...admin.image_forms import ImageForm
 from ...admin.post_forms import PostForm
 from ...models.Images import Images
@@ -19,7 +19,7 @@ image_form_set = modelformset_factory(Images,
 
 @login_required
 def post_image_upload(request, pk: str):
-    post = get_object_or_404(Post, pk=pk)
+    post = get_object_or_404(Posts, pk=pk)
     post_form = PostForm(request.POST, instance=post)
     formset = image_form_set(request.POST, request.FILES,
                              queryset=Images.objects.none())

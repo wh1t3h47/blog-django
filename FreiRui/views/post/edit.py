@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from FreiRui.admin.post_forms import PostForm
-from FreiRui.models.Post import Post
+from FreiRui.models.Posts import Posts
 from FreiRui.views.post.forms import return_rendered_html_forms
 from .forms import return_rendered_html_forms
 
@@ -18,7 +18,7 @@ ResponseOrRedirect = Union[HttpResponseRedirect, HttpResponse]
 @login_required
 def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     if request.method == "POST":
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Posts, pk=pk)
         post_form = PostForm(request.POST, instance=post)
         if post_form.is_valid():
             saved_post_form: PostForm = post_form.save(commit=False)

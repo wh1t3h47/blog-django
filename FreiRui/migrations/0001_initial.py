@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name='Categories',
             fields=[
                 ('id', models.BigAutoField(auto_created=True,
                  primary_key=True, serialize=False, verbose_name='ID')),
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Gallery',
+            name='Galleries',
             fields=[
                 ('id', models.BigAutoField(auto_created=True,
                  primary_key=True, serialize=False, verbose_name='ID')),
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('author', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('category', models.ForeignKey(
-                    on_delete=django.db.models.deletion.DO_NOTHING, to='FreiRui.category')),
+                    on_delete=django.db.models.deletion.DO_NOTHING, to='FreiRui.Categories')),
             ],
         ),
         migrations.CreateModel(
@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(
                     upload_to=FreiRui.models.Images.get_image_filename, verbose_name='Images')),
                 ('gallery', models.ForeignKey(
-                    on_delete=django.db.models.deletion.CASCADE, to='FreiRui.gallery')),
+                    on_delete=django.db.models.deletion.CASCADE, to='FreiRui.Galleries')),
             ],
         ),
     ]

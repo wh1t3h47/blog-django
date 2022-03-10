@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from social_django.models import UserSocialAuth
 
-from FreiRui.models.Post import Post
+from FreiRui.models.Posts import Posts
 from FreiRui.models.Images import Images
 
 from facepy import GraphAPI
@@ -28,8 +28,8 @@ def get_images(galleries_id: List[str]):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FacebookPost(LoginRequiredMixin, TemplateView):
-    def _get_unpublished_facebook_posts(self) -> List[Post]:
-        posts: List[Post] = Post.objects.filter(
+    def _get_unpublished_facebook_posts(self) -> List[Posts]:
+        posts: List[Posts] = Posts.objects.filter(
             category__published=True,
             is_deleted=False,
             published_date__lte=timezone.now(),

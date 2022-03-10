@@ -25,3 +25,4 @@ markdown
 requests
 requests-cache
 django-request
+django-smuggler

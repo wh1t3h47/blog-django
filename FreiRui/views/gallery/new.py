@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from FreiRui.admin.image_forms import ImageForm
-from FreiRui.models.Category import Category
+from FreiRui.models.Categories import Categories
 from FreiRui.models.Images import Images
-from FreiRui.models.Gallery import Gallery
+from FreiRui.models.Galleries import Galleries
 
 ResponseOrRedirect = Union[HttpResponse, JsonResponse]
 
@@ -21,7 +21,7 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
             images = request.FILES.getlist('images')
             if images and len(images) > 0:
                 images_urls: list[str] = list()
-                gallery = Gallery()
+                gallery = Galleries()
                 gallery.save()
                 # now upload all the images to the gallery
                 for image in images:
@@ -40,7 +40,7 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
     # else if request.method == "GET":
     form = ImageForm()
     if (request.user.is_authenticated):
-        categories: List[Category] = Category.objects.order_by('order')
+        categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
     return render(request, 'gallery/new.html', {'form': form, 'categories': categories})

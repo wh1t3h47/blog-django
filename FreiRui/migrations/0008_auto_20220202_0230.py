@@ -11,13 +11,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='category',
+            model_name='categories',
             name='title',
             field=models.CharField(max_length=30, verbose_name='Título (página)'),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='name',
             field=models.CharField(max_length=30, verbose_name='Nome (barra de ferramentas)'),
         ),

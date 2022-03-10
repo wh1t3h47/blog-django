@@ -4,14 +4,14 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from FreiRui.admin.post_forms import PostForm
-from FreiRui.models.Category import Category
-from FreiRui.models.Post import Post
+from FreiRui.models.Categories import Categories
+from FreiRui.models.Posts import Posts
 
 
 def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: str = None) -> HttpResponse:
-    post: Post = None
+    post: Posts = None
     if pk:
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Posts, pk=pk)
     if post:
         post_form.fields['title'].widget.attrs['value'] = post.title
         post_form.fields['text'].widget.attrs['value'] = post.text
@@ -34,8 +34,8 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
         }
     # print(f'formset: {formset}')
     if (request.user.is_authenticated):
-        categories: List[Category] = Category.objects.order_by('order')
+        categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
     return render(request, 'post/edit.html',
                   {'post_form': post_form, 'default_values': default_values, 'categories': categories})

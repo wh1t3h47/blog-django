@@ -1,8 +1,8 @@
 from django import forms
-from ..models.Category import Category
+from ..models.Categories import Categories
 
 
 class CategoryForm(forms.ModelForm):
     class Meta:
-        model = Category
+        model = Categories
         fields = ('name', 'published', 'listing_type', 'order', 'short_name', 'title', 'video_url')

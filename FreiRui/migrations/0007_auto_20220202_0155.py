@@ -11,18 +11,18 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='category',
+            model_name='categories',
             name='short_name',
             field=models.CharField(max_length=30, verbose_name='Nome curto (singular)'),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='name',
             field=models.CharField(max_length=30, verbose_name='Nome'),
         ),
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='order',
             field=models.IntegerField(default=0, verbose_name='Ordem da categoria na listagem'),
         ),

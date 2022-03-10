@@ -67,7 +67,7 @@
                     className: `${PREFIX}toolbar-icons align-right`,
                     command: 'alignTextRight'
                 },
-            ]
+            ];
         }
 
         const createSelection = (
@@ -138,10 +138,14 @@
                     alignText: ({ selectedAlignment }, { tr, selection, schema }, dispatch) => {
                         if (selectedAlignment) {
                             const { from, to } = selection;
+                            console.log({ from, to });
+                            console.log(selection, schema);
                             const attrs = { htmlAttrs: { style: `display: block; text-align: ${selectedAlignment};` } };
                             const mark = schema.marks.span.create(attrs);
+                            console.log(tr)
 
                             tr.addMark(from, to, mark);
+                            console.log(tr)
                             dispatch(tr);
 
                             return true;
@@ -252,7 +256,8 @@
 
 
         const colorSyntaxOptions = {
-            preset: ['#2264ac', '#44364e'],
+            preset: ['#2264ac', '#44364e', '#000000'],
+            color: '#2264ac',
         };
 
         const plugins = [[Editor.plugin.colorSyntax, colorSyntaxOptions], alignTextPlugin];
@@ -296,16 +301,16 @@
         DatePicker.localeTexts['pt-BR'] = {
             titles: {
                 // days
-                DD: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                DD: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado',],
                 // daysShort
-                D: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                D: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab',],
                 // months
                 MMMM: [
                     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
                 ],
                 // monthsShort
-                MMM: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+                MMM: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',]
             },
             titleFormat: 'MMM yyyy',
             todayFormat: 'D, dd \\de MMMM \\de yyyy',
@@ -362,7 +367,7 @@
             image.addEventListener('click', (ev) => {
                 const confirmation = confirm('Tem certeza que deseja sair da página para editar esta imagem?');
                 if (confirmation) {
-                    const relativePath = image.src.replace(`${window.location.origin}/media/`, '')
+                    const relativePath = image.src.replace(`${window.location.origin}/media/`, '');
                     window.location.href = `/picture/${relativePath}/edit/`;
                 }
             });

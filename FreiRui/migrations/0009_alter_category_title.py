@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='title',
             field=models.CharField(max_length=255, verbose_name='Título (página)'),
         ),

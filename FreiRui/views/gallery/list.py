@@ -4,26 +4,26 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from FreiRui.models.Category import Category
-from FreiRui.models.Gallery import Gallery
+from FreiRui.models.Categories import Categories
+from FreiRui.models.Galleries import Galleries
 from FreiRui.models.Images import Images
-from FreiRui.models.Post import Post
+from FreiRui.models.Posts import Posts
 
 
 @login_required
 def gallery_list(request: HttpRequest) -> HttpResponse:
     if (request.user.is_authenticated):
-        categories: List[Category] = Category.objects.order_by('order')
-        posts: List[Post] = Post.objects.order_by('published_date')
+        categories: List[Categories] = Categories.objects.order_by('order')
+        posts: List[Posts] = Posts.objects.order_by('published_date')
     else:
-        posts: List[Post] = Post.objects.filter(
+        posts: List[Posts] = Posts.objects.filter(
         category__published=True).order_by('published_date')
-        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
     posts_list = [*posts]
     galleries: List[List[str]] = []
 
     for post in posts_list:
-        all_galeries: List[Gallery] = [*post.galleries.all()]
+        all_galeries: List[Galleries] = [*post.galleries.all()]
         pictures_in_post: List[str] = []
         for gallery in all_galeries:
             Images.objects.filter(gallery=gallery)

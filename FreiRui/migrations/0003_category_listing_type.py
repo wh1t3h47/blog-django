@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='category',
+            model_name='categories',
             name='listing_type',
             field=models.CharField(default='cards', max_length=10),
         ),

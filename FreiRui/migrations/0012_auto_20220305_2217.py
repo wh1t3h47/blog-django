@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='short_name',
             field=models.CharField(blank=True, max_length=30, verbose_name='Nome curto (singular)'),
         ),
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='video_url',
             field=models.CharField(blank=True, max_length=255, null=True, verbose_name='ID do canal do YouTube'),
         ),

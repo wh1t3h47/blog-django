@@ -41,7 +41,7 @@
             // adiciona o evento de click para cada imagem
             edit_button.addEventListener('click', (ev) => {
                 const imageEditorOpen = window.ImageEditorOpen;
-                const relativePath = image.src.replace(`${window.location.origin}/media/`, '')
+                const relativePath = image.src.replace(`${window.location.origin}/media/`, '');
                 window.location.href = `/picture/${relativePath}/edit/`;
             });
             // substitui a imagem por uma div

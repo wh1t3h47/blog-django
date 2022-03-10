@@ -4,7 +4,7 @@ from django.db import models
 CATEGORY_LENGTH = 30
 
 
-class Category(models.Model):
+class Categories(models.Model):
     ''' A category is a group of posts that will be avaliable in the navbar '''
     name = models.CharField(max_length=CATEGORY_LENGTH, verbose_name="Nome (barra de ferramentas)")
     short_name = models.CharField(max_length=CATEGORY_LENGTH, verbose_name="Nome curto (singular)", blank=True)

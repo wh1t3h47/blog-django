@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='category',
+            model_name='categories',
             name='order',
             field=models.IntegerField(default=0),
         ),

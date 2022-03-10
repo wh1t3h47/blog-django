@@ -1,5 +1,5 @@
 from django import forms
-from ..models.Post import Post
+from ..models.Posts import Posts
 
 # class FileFieldForm(forms.Form):
 #     file_field = forms.FileField(
@@ -9,5 +9,5 @@ from ..models.Post import Post
 class PostForm(forms.ModelForm):
 
     class Meta:
-        model = Post
+        model = Posts
         fields = ('title', 'text', 'published_date', 'category', 'galleries', 'is_deleted', )

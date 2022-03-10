@@ -1,7 +1,7 @@
 from django.db import models
 from random import randint
 
-from .Gallery import Gallery
+from .Galleries import Galleries
 
 
 def get_image_filename(instance, filename: str):
@@ -20,4 +20,4 @@ def get_image_filename(instance, filename: str):
 class Images(models.Model):
     image = models.ImageField(upload_to=get_image_filename,
                               verbose_name='Images')
-    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE)
+    Galleries = models.ForeignKey(Galleries, on_delete=models.CASCADE)

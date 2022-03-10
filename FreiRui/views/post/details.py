@@ -3,14 +3,14 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
-from FreiRui.models.Category import Category
-from FreiRui.models.Post import Post
+from FreiRui.models.Categories import Categories
+from FreiRui.models.Posts import Posts
 
 
 def post_details(request: HttpRequest, category: str, pk: str) -> HttpResponse:
     if (request.user.is_authenticated):
-        categories: List[Category] = Category.objects.order_by('order')
+        categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
-    post = get_object_or_404(Post, category__name=category, pk=pk)
+        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+    post = get_object_or_404(Posts, category__name=category, pk=pk)
     return render(request, 'post/details.html', {'post': post, 'categories': categories})

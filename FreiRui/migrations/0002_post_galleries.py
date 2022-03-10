@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='galleries',
-            field=models.ManyToManyField(blank=True, to='FreiRui.Gallery'),
+            field=models.ManyToManyField(blank=True, to='FreiRui.Galleries'),
         ),
     ]

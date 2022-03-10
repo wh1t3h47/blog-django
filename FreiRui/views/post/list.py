@@ -6,8 +6,8 @@ from django.utils import timezone
 from datetime import timedelta
 from requests_cache import CachedSession
 
-from FreiRui.models.Category import Category
-from FreiRui.models.Post import Post
+from FreiRui.models.Categories import Categories
+from FreiRui.models.Posts import Posts
 
 session = CachedSession(
     'youtube_rss',
@@ -22,18 +22,18 @@ session = CachedSession(
 
 def post_list(request: HttpRequest, category: str) -> HttpResponse:
     if (request.user.is_authenticated):
-        categories: List[Category] = Category.objects.order_by('order')
-        posts: List[Post] = Post.objects.filter(
+        categories: List[Categories] = Categories.objects.order_by('order')
+        posts: List[Posts] = Posts.objects.filter(
         category__name=category,
         ).order_by('published_date')
     else:
-        categories: List[Category] = Category.objects.filter(published=True, ).order_by('order')
-        posts: List[Post] = Post.objects.filter(
+        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+        posts: List[Posts] = Posts.objects.filter(
         category__name=category,
         category__published=True,
         is_deleted=False,
         published_date__lte=timezone.now()).order_by('published_date')
-    category = Category.objects.get(name=category.replace('_', ' '))
+    category = Categories.objects.get(name=category.replace('_', ' '))
     youtube_rss = ''
     post_type: Union[Literal['cards'], Literal['accordion'], Literal['single'], Literal['youtube']] = 'cards'
     if category.listing_type == 'accordion':
@@ -41,7 +41,7 @@ def post_list(request: HttpRequest, category: str) -> HttpResponse:
     elif category.listing_type == 'single':
         post_type = 'single'
         if len(posts) > 0:
-          posts: Post = posts[0]
+          posts: Posts = posts[0]
     elif category.listing_type == 'youtube':
         post_type = 'youtube'
         youtube_url = category.video_url

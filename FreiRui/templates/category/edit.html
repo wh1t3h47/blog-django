@@ -118,9 +118,9 @@
         }
 
 
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         })
     };
 
@@ -143,22 +143,22 @@
     <ul class="img-checkvf">
         <li>
             <input type="checkbox" onchange="setAccordion();" id="accordion-listing">
-            <label for="accordion-listing"><img src="{% static 'accordion.png' %}"></label>
+            <label for="accordion-listing"><img alt="Listar posts em acordião" src="{% static 'accordion.png' %}"></label>
         </li>
         <li>
 
             <input type="checkbox" onchange="setCards();" id="cards-listing">
-            <label for="cards-listing"><img src="{% static 'cards.png' %}"></label>
+            <label for="cards-listing"><img alt="Listar posts em cartões" src="{% static 'cards.png' %}"></label>
         </li>
         <li>
 
             <input type="checkbox" onchange="setSingle();" id="single-listing">
-            <label for="single-listing"><img src="{% static 'single.png' %}"></label>
+            <label for="single-listing"><img alt="Listar apenas um post por página" src="{% static 'single.png' %}"></label>
         </li>
         <li>
 
             <input type="checkbox" onchange="setYoutube();" id="youtube-listing">
-            <label for="youtube-listing"><img src="{% static 'youtube.png' %}"></label>
+            <label for="youtube-listing"><img alt="Listar vídeos do YouTube" src="{% static 'youtube.png' %}"></label>
         </li>
     </ul>
 </div>

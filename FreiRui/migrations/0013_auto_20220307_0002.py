@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='published',
             field=models.BooleanField(default=True, verbose_name='Publicado'),
         ),
         migrations.AlterField(
-            model_name='category',
+            model_name='categories',
             name='title',
             field=models.CharField(blank=True, max_length=255, verbose_name='Título (página)'),
         ),
