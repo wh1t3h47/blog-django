@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from social_django.models import UserSocialAuth
 
+
 class Settings(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -39,4 +40,3 @@ class Settings(LoginRequiredMixin, TemplateView):
             'facebook_login': facebook_login,
             'can_disconnect': can_disconnect
         })
-

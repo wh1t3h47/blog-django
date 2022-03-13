@@ -18,6 +18,7 @@ from facepy import GraphAPI
 from bs4 import BeautifulSoup
 from markdown import markdown
 
+
 def get_images(galleries_id: List[str]):
     all_images: List[str] = []
     for gallery_id in galleries_id:
@@ -25,6 +26,7 @@ def get_images(galleries_id: List[str]):
         images = [str(img.image) for img in images]
         all_images = [*all_images, *images]
     return all_images
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FacebookPost(LoginRequiredMixin, TemplateView):
@@ -65,7 +67,8 @@ class FacebookPost(LoginRequiredMixin, TemplateView):
             for post in unpublished_posts:
                 graph = GraphAPI(facebook_oauth_token)
                 html = markdown(post.text)
-                plain_text = ''.join(BeautifulSoup(html, features="lxml").findAll(text=True))
+                plain_text = ''.join(BeautifulSoup(
+                    html, features="lxml").findAll(text=True))
                 text = f"{post.title}\n{plain_text}"
                 images = get_images(post.galleries.all())
                 post = {
@@ -74,7 +77,8 @@ class FacebookPost(LoginRequiredMixin, TemplateView):
                 }
                 print(images)
                 user_id = facebook.uid
-                graph.post(path=f"{user_id}/photos", url=f"http://localhost/{images[0]}", published=False)
+                graph.post(
+                    path=f"{user_id}/photos", url=f"http://localhost/{images[0]}", published=False)
                 # graph.post(path="me/photos", message=text, url=f"http://localhost/{images[0]}")
 
                 post.facebook_posted = True

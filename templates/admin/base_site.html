@@ -24,7 +24,8 @@
         --default-button-hover-bg: #3f8ad9;
     }
 
-    #user-tools a:focus, #user-tools a:hover {
+    #user-tools a:focus,
+    #user-tools a:hover {
         color: var(--button-hover-bg);
     }
 </style>
@@ -36,7 +37,9 @@
         background-color: #b7cde2 !important;
     }
 </style>
-<img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
+<a href="/">
+    <img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
+</a>
 {{ block.super }}
 {% endblock %}
 

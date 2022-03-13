@@ -8,8 +8,10 @@ from FreiRui.models.Categories import Categories
 from FreiRui.views.post.list import post_list
 from FreiRui.views.category.new import category_new
 
+
 def index(request: HttpRequest) -> HttpResponse:
-    categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+    categories: List[Categories] = Categories.objects.filter(
+        published=True, ).order_by('order')
     if len(categories) > 0:
         category = categories[0]
         posts_view = post_list(request, category.name)

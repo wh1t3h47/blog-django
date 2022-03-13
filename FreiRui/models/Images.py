@@ -20,4 +20,4 @@ def get_image_filename(instance, filename: str):
 class Images(models.Model):
     image = models.ImageField(upload_to=get_image_filename,
                               verbose_name='Images')
-    Galleries = models.ForeignKey(Galleries, on_delete=models.CASCADE)
+    gallery = models.ForeignKey(Galleries, on_delete=models.CASCADE)

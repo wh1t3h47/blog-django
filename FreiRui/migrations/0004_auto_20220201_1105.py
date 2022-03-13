@@ -19,12 +19,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='FreiRui.Categories', verbose_name='Categoria da postagem'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING,
+                                    to='FreiRui.Categories', verbose_name='Categoria da postagem'),
         ),
         migrations.AlterField(
             model_name='post',
             name='published_date',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Data de publicação (selecione no futuro para agendar)'),
+            field=models.DateTimeField(
+                blank=True, null=True, verbose_name='Data de publicação (selecione no futuro para agendar)'),
         ),
         migrations.AlterField(
             model_name='post',

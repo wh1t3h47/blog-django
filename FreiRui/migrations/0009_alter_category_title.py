@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='categories',
             name='title',
-            field=models.CharField(max_length=255, verbose_name='Título (página)'),
+            field=models.CharField(
+                max_length=255, verbose_name='Título (página)'),
         ),
     ]

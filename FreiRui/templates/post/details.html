@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load markdown_deux_tags %}
+{% load markdownify %}
 
 {% block content %}
 
@@ -66,6 +66,6 @@
     </div>
     {% endif %}
     <h2 style="display: none;">{{ post.title }}</h2>
-    <p class="post-cruncher">{{ post.text | markdown:"safe" }}</p>
+    <p class="post-cruncher">{{ post.text | markdownify }}</p>
 </div>
 {% endblock %}

@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='categories',
             name='video_url',
-            field=models.CharField(blank=True, max_length=255, null=True, verbose_name='URL do vídeo'),
+            field=models.CharField(
+                blank=True, max_length=255, null=True, verbose_name='URL do vídeo'),
         ),
     ]

@@ -23,13 +23,16 @@ def category_new(request: HttpRequest) -> ResponseOrRedirect:
             category: Categories = category_form.save(commit=False)
             category.name = str.replace(category.name, '/', '')
             category.name = str.replace(category.name, '_', '')
-            categories_matching_name = Categories.objects.filter(name=category.name).count()
+            categories_matching_name = Categories.objects.filter(
+                name=category.name).count()
             if categories_matching_name > 0:
                 messages.error(request, 'Category name already exists')
                 if (request.user.is_authenticated):
-                    categories: List[Categories] = Categories.objects.order_by('order')
+                    categories: List[Categories] = Categories.objects.order_by(
+                        'order')
                 else:
-                    categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+                    categories: List[Categories] = Categories.objects.filter(
+                        published=True, ).order_by('order')
                 return render(request, 'category/edit.html', {'category_form': category_form, 'category': category, 'categories': categories, 'failed_category_exists': True})
             category.save()
             return redirect('post_list', category=category.name)
@@ -41,5 +44,6 @@ def category_new(request: HttpRequest) -> ResponseOrRedirect:
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(
+            published=True, ).order_by('order')
     return render(request, 'category/edit.html', {'category_form': category_form, 'categories': categories, 'category': default_fields})

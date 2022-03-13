@@ -19,7 +19,8 @@ class Posts(models.Model):
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True, verbose_name="Data de publicação (selecione no futuro para agendar)")
+    published_date = models.DateTimeField(
+        blank=True, null=True, verbose_name="Data de publicação (selecione no futuro para agendar)")
     galleries = models.ManyToManyField(Galleries, blank=True)
     is_deleted = models.BooleanField(default=False, verbose_name="Ocultado?")
     instagram_posted = models.BooleanField(default=False)

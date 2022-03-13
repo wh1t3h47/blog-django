@@ -50,5 +50,6 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(
+            published=True, ).order_by('order')
     return render(request, 'picture/edit.html', {'image_form': image_form, 'picture': picture, 'categories': categories})

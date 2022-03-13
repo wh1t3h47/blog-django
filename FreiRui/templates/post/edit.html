@@ -224,7 +224,7 @@
 
             const formData = new FormData(galleryForm);
             const uploaded = await fetch(
-                '/gallery/new/',
+                '{% url "gallery_new" %}',
                 {
                     method: 'POST',
                     body: formData,
@@ -282,7 +282,7 @@
         // por causa da proteção de CSRF, assim carregamos os forms num iframe)
 
         (async () => {
-            const response = await fetch('/gallery/new/');
+            const response = await fetch('{% url "gallery_new" %}');
             const blob = await response.blob();
             const text = await blob.text();
             // console.log(text);

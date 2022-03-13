@@ -36,6 +36,7 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(
+            published=True, ).order_by('order')
     return render(request, 'post/edit.html',
                   {'post_form': post_form, 'default_values': default_values, 'categories': categories})

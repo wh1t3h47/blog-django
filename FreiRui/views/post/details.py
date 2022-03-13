@@ -11,6 +11,7 @@ def post_details(request: HttpRequest, category: str, pk: str) -> HttpResponse:
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(
+            published=True, ).order_by('order')
     post = get_object_or_404(Posts, category__name=category, pk=pk)
     return render(request, 'post/details.html', {'post': post, 'categories': categories})

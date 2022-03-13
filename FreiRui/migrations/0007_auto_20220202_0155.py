@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='categories',
             name='short_name',
-            field=models.CharField(max_length=30, verbose_name='Nome curto (singular)'),
+            field=models.CharField(
+                max_length=30, verbose_name='Nome curto (singular)'),
             preserve_default=False,
         ),
         migrations.AlterField(
@@ -24,6 +25,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='categories',
             name='order',
-            field=models.IntegerField(default=0, verbose_name='Ordem da categoria na listagem'),
+            field=models.IntegerField(
+                default=0, verbose_name='Ordem da categoria na listagem'),
         ),
     ]

@@ -42,5 +42,6 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')
     else:
-        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+        categories: List[Categories] = Categories.objects.filter(
+            published=True, ).order_by('order')
     return render(request, 'gallery/new.html', {'form': form, 'categories': categories})

@@ -4,8 +4,10 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
+
 def post_to_facebook():
     r = post(f"{env('HOST')}/post_to_facebook/")
+
 
 def post_to_instagram():
     pass

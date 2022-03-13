@@ -45,11 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'markdown_deux',
+    'markdownify.apps.MarkdownifyConfig',
     'social_django',
     'django_crontab',
     'request',
     'smuggler',
+    'defender',
     'FreiRui',
 ]
 
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'defender.middleware.FailedLoginMiddleware',
 ]
 
 ROOT_URLCONF = 'FreiRui.urls'
@@ -172,9 +174,9 @@ CRONJOBS = [
     ('*/2 * * * *', 'FreiRui.cron.post_to_social_media'),
 ]
 
-REQUEST_BASE_URL = 'https://freiruidepine.com.br'
+REQUEST_BASE_URL = 'https://env("HOST")'
 REQUEST_IGNORE_USER_AGENTS = (
-    r'^$', # ignore requests with no user agent string set
+    r'^$',  # ignore requests with no user agent string set
     r'Googlebot',
     r'Baiduspider',
 )
@@ -188,16 +190,54 @@ REQUEST_PLUGINS = (
     'request.plugins.TopBrowsers',
 )
 REQUEST_TRAFFIC_MODULES = (
-'request.traffic.UniqueVisitor',
-'request.traffic.UniqueVisit',
-'request.traffic.Hit',
-'request.traffic.Error',
+    'request.traffic.UniqueVisitor',
+    'request.traffic.UniqueVisit',
+    'request.traffic.Hit',
+    'request.traffic.Error',
 )
 REQUEST_VALID_METHOD_NAMES = (
     'get',
 )
 REQUEST_IGNORE_AJAX = True
-REQUEST_IGNORE_PATHS = (
-    r'^admin/',
-)
+# Não ignorar esse caminho, pois assim podemos logar tentativas de login
+# REQUEST_IGNORE_PATHS = (
+#     r'^admin/',
+# )
 REQUEST_IGNORE_USERNAME = 'admin'
+
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            'a',
+            'abbr',
+            'acronym',
+            'b',
+            'blockquote',
+            'em',
+            'i',
+            'li',
+            'ol',
+            'p',
+            'strong',
+            'ul',
+            'span'
+        ],
+        "WHITELIST_ATTRS": [
+            'href',
+            'src',
+            'alt',
+            'style'
+        ],
+        "WHITELIST_STYLES": [
+            'color',
+            'display',
+            'text-align'
+        ]
+    }
+}
+
+REDIS_PASSWORD = env('REDIS_PASSWORD')
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
+DEFENDER_REDIS_URL = REDIS_URL

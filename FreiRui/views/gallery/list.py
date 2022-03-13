@@ -17,8 +17,9 @@ def gallery_list(request: HttpRequest) -> HttpResponse:
         posts: List[Posts] = Posts.objects.order_by('published_date')
     else:
         posts: List[Posts] = Posts.objects.filter(
-        category__published=True).order_by('published_date')
-        categories: List[Categories] = Categories.objects.filter(published=True, ).order_by('order')
+            category__published=True).order_by('published_date')
+        categories: List[Categories] = Categories.objects.filter(
+            published=True, ).order_by('order')
     posts_list = [*posts]
     galleries: List[List[str]] = []
 

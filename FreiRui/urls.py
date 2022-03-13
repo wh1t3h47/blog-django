@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns += [
     path('admin/', include('smuggler.urls')),
     path('admin/', admin.site.urls),
+    path('admin/defender/', include('defender.urls')),
 ]
 
 admin.site.site_title = "Administração do Legado do Frei Rui"
