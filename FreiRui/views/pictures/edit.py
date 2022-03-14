@@ -39,6 +39,7 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
         else:
             print(image_form.errors)
             messages.error(request, "Image not updated")
+            messages.error(request, str(image_form.errors))
     # else if request.method == "GET":
     image_form = EditImageForm()
     # disallow multiple files

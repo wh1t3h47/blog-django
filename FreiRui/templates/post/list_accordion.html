@@ -3,7 +3,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 <span style="display: flex; flex-direction: row; justify-content: space-evenly;">
-    <a href="{% url 'post_new' %}" class="top-menu"
+    <a href="{% url 'post_new' category=category.name %}" class="top-menu"
         style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
         <i class="far fa-plus-square fa-5x"></i>
         <p> criar postagem </p>
@@ -35,7 +35,7 @@
 
         <div class="btn-custom">
             <button class="button-bb"
-                onclick="(() => window.location.href = `{% url 'post_details' category=post.category pk=post.pk %}`)()">
+                onclick="(() => window.location.href = `{% url 'post_details' category=post.category pk=post.pk %}`.replace('%20', '_'))()">
                 Ler {{ post.category.short_name }}
             </button>
         </div>

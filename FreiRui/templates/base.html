@@ -10,7 +10,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"
-        integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS?display=swap" crossorigin="anonymous">
+        integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS?display=swap"
+        crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{% static 'style.css' %}">
@@ -32,18 +33,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name = "description" content = "Legado do Frei Rui Guido Depiné, obras, textos, eventos e ações do Frei, conteúdo católico e cristão sem fins lucrativos">
+    <meta name="description"
+        content="Legado do Frei Rui Guido Depiné, obras, textos, eventos e ações do Frei, conteúdo católico e cristão sem fins lucrativos">
     <title>Legado do Frei Rui Guido Depiné</title>
     <!-- meta property="fb:page_id" content="271595581748248" -->
 </head>
 
 <body>
-    <header class=" text-white">
+    <header class="text-white">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
-                </a>
+                <div class="text-bg" style="margin-left: 5px;">
+                    <a class="navbar-brand" href="/">
+                        <img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
+                    </a>
+                    <a href="/admin" class="nav-link">Painel de Admin</a>
+                </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation" style="margin-right: 10px;">
@@ -61,8 +66,8 @@
                                 </a>
                                 {% endif %}
                                 <a class="nav-link dropdown-toggle {% if category.published == False %} danger {% endif %}"
-                                    href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                    href="#" style="cursor: default;" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ category.name }}
                                 </a>
                                 {% if user.is_authenticated %}
@@ -87,7 +92,7 @@
                                     {% endif %}
                                 </li>
                                 <!-- assign next element to a variable -->
-                                {% with next_category=category|next:forloop.counter0 %}
+                                {% with next_category=categories|next:forloop.counter0 %}
                                 <li>
                                     {% if next_category.pk %}
                                     {% if user.is_authenticated %}

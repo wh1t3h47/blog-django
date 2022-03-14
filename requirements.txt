@@ -7,8 +7,9 @@ coverage
 django-debug-toolbar
 greeking
 flake8
-psycopg2
-pycrypto
+psycopg
+# pycrypto (Unmantained)
+pycryptodome
 pyflakes
 python-coveralls
 python-memcached
@@ -28,3 +29,4 @@ requests-cache
 django-request
 django-smuggler
 django-defender
+tarsafe

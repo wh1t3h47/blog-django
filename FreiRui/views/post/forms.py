@@ -8,7 +8,7 @@ from FreiRui.models.Categories import Categories
 from FreiRui.models.Posts import Posts
 
 
-def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: str = None) -> HttpResponse:
+def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: str = None, category: str = '') -> HttpResponse:
     post: Posts = None
     if pk:
         post = get_object_or_404(Posts, pk=pk)
@@ -32,6 +32,8 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
             'category': post.category,
             'galleries': [str(x) for x in [*post.galleries.all()]]
         }
+    if category:
+        default_values['category'] = category
     # print(f'formset: {formset}')
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')

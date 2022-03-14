@@ -44,6 +44,7 @@ def post_image_upload(request, pk: str):
     else:
         print(post_form.errors, formset.errors)
         messages.error(request, "Image not uploaded")
+        messages.error(request, str(post_form.errors))
     # print(f'formset: {formset}')
     return render(request, 'post/edit.html',
                   {'post_form': post_form, 'formset': formset})

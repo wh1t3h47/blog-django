@@ -40,6 +40,7 @@ def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
         else:
             print(category_form.errors)
             messages.error(request, 'Invalid category form')
+            messages.error(request, str(category_form.errors))
     # print(f'formset: {formset}')
         return render(request, 'category/edit.html',
                       {'category_form': category_form, 'category': category})

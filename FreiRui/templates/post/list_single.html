@@ -12,11 +12,13 @@
         <p> Editar post </p>
     </a>
     {% endif %}
-    <a href="{% url 'post_new' %}" class="top-menu"
+    {% if not posts.pk %}
+    <a href="{% url 'post_new' category=category.name %}" class="top-menu"
         style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
         <i class="far fa-plus-square fa-5x"></i>
         <p> criar postagem </p>
     </a>
+    {% endif %}
     <a href="{% url 'category_new' %}" class="top-menu"
         style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
         <i class="far fa-plus-square fa-5x"></i>

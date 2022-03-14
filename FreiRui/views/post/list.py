@@ -3,11 +3,12 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.conf import settings
 from datetime import timedelta
 from redis import StrictRedis
 from requests_cache import CachedSession
 
-from FreiRui.settings import REDIS_PASSWORD, REDIS_HOST, REDIS_PORT
+
 from FreiRui.models.Categories import Categories
 from FreiRui.models.Posts import Posts
 
@@ -26,9 +27,9 @@ session = CachedSession(
     # In case of request errors, use stale cache data if possible
     stale_if_error=True,
     backend='redis',                    # Use the redis cache backend
-    host=f"{REDIS_HOST}",
-    port=int(REDIS_PORT),
-    password=REDIS_PASSWORD,
+    host=f"{settings.REDIS_HOST}",
+    port=int(settings.REDIS_PORT),
+    password=settings.REDIS_PASSWORD,
 )
 
 
@@ -47,6 +48,7 @@ def post_list(request: HttpRequest, category: str) -> HttpResponse:
             category__published=True,
             is_deleted=False,
             published_date__lte=timezone.now()).order_by('published_date')
+    # [print(category.__dict__) for category in categories]
     category = Categories.objects.get(name=category)
     youtube_rss = ''
     post_type: Union[Literal['cards'], Literal['accordion'],

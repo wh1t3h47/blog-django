@@ -8,6 +8,7 @@ from FreiRui.models.Posts import Posts
 
 
 def post_details(request: HttpRequest, category: str, pk: str) -> HttpResponse:
+    category = category.replace('_', ' ')
     if (request.user.is_authenticated):
         categories: List[Categories] = Categories.objects.order_by('order')
     else:

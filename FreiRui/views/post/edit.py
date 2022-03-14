@@ -30,6 +30,7 @@ def post_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
         else:
             print(post_form.errors)
             messages.error(request, "Post not updated")
+            messages.error(request, str(post_form.errors))
     # print(f'formset: {formset}')
         return return_rendered_html_forms(request, post_form, pk)
 

@@ -1,10 +1,28 @@
 {% extends "admin/index.html" %}
 
 {% block content %}
+<script>
+    const showRestoreMedia = () => {
+        const restoreMedia = document.getElementById('restore-media');
+        restoreMedia.style.display = 'block';
+    }
+    window.showRestoreMedia = showRestoreMedia;
+</script>
 <a href="/admin/request/request/overview/" style="margin-bottom: 12px; display: block;">Ver estatísticas de acesso</a>
-<span style="display: flex; margin-bottom: 30px;">
-    <a href="/admin/dump" style="margin-right: 20px">Fazer Backup</a>
-    <a href="/admin/load">Restaurar Backup</a>
+<span style="display: flex; margin-bottom: 10px; justify-content: space-between;">
+    <a href="/admin/dump">Fazer Backup dos dados</a>
+    <a href="/admin/load">Restaurar Backup dos dados</a>
 </span>
+<span style="display: flex; margin-bottom: 30px; justify-content: space-between;">
+    <a href="/backup_media">Fazer Backup das midias</a>
+    <a href="#" onclick="showRestoreMedia()">Restaurar Backup das mídias</a>
+</span>
+<form method="post" action="/restore_media/" enctype="multipart/form-data" style="margin-bottom: 30px; display: none;"
+    id="restore-media">
+    {% csrf_token %}
+    <label for="file">Carregar arquivo de mídia: </label>
+    <input type="file" name="file" id="file" required="" />
+    <input type="submit" value="Enviar" />
+</form>
 {{ block.super }}
 {% endblock %}

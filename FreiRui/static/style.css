@@ -9,7 +9,7 @@ body {
 }
 
 .bg-custom-header {
-  background-color: #b7cde2;
+  background-color: #d3edfc;
 }
 
 .text-bg a {
@@ -29,7 +29,7 @@ body {
 
 .dropdown:hover > .dropdown-menu {
   display: block;
-  background-color: #91b4d5;
+  background-color: #c1e6fb;
   border: none;
   color: white !important;
   flex-flow: nowrap;
@@ -38,7 +38,7 @@ body {
 }
 
 .dropdown-item:hover {
-  background-color: #c8dcf4 !important;
+  background-color: #b7e2fa !important;
 }
 
 .text-sub {
@@ -254,7 +254,7 @@ h2 {
 }
 
 .bg-light {
-  background: #b7cde2 !important;
+  background: #d3edfc !important;
 }
 
 label[for="id_listing_type"],
@@ -395,7 +395,7 @@ footer {
 
   .nav-item {
     height: 100%;
-    background-color: #91b4d5 !important;
+    background-color: #b7e2fa !important;
     display: flex;
     place-items: center;
     flex-direction: column;
@@ -421,4 +421,12 @@ footer {
 
 /* Dispositivos large (desktops com menos de 1200px) */
 @media (max-width: 1199.98px) {
+}
+
+img {
+  max-width: 100%;
+}
+
+h1,h2 {
+  color: 2264ac;
 }
