@@ -17,18 +17,50 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
     <script>
-        // window.onload = () => {
-        //     const postsRaw = [...document.getElementsByClassName('post-cruncher')]
-        //     postsRaw.forEach((rawPost) => {
-        //         // Converte o markdown dos posts em html
-        //         rawPost.innerHTML = window.markdownit().render(rawPost.innerHTML)
-        //     })
-        // }
         function goToCategory(category) {
             this.event.preventDefault();
             const prettifiedUrl = category.replace(/\s|%20/g, '_');
             window.location.href = prettifiedUrl;
         }
+        
+        const getCookieLang = () => (/.*lang=([^;]*).*/i.exec(document.cookie) ?? [''])[1] || 'pt';
+        window.getCookieLang = getCookieLang;
+
+        const setCookie = (lang) => {
+            const now = new Date();
+            const time = now.getTime();
+            const expireTime = time + 3600000 * 36000;
+            const expireDate = now;
+            expireDate.setTime(expireTime);
+            const prev_lang = getCookieLang();
+            document.cookie = `prev_lang=${prev_lang};expires=${expireDate.toUTCString()};path=/`;
+            document.cookie = `lang=${lang};expires=${expireDate.toUTCString()};path=/`;
+            //console.log(document.cookie);  // 'Wed, 31 Oct 2012 08:50:17 UTC'
+        }
+
+
+        const setSelectedLanguage = () => {
+            const lang = getCookieLang();
+            const langSelector = document.getElementById('lang-select');
+            const langOptions = langSelector.getElementsByTagName('option');
+
+            [...langOptions].some((option) => {
+                if (option.value === lang) {
+                    option.selected = true;
+                    return true;
+                }
+            })
+        }
+
+        function changeValue() {
+            const langSelect = document.getElementById('lang-select');
+            const { value = 'pt' } = langSelect;
+            setCookie(value);
+            // Reload the page
+            window.location.reload();
+        }
+
+        window.onload = () => setSelectedLanguage();
     </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,7 +79,9 @@
                     <a class="navbar-brand" href="/">
                         <img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
                     </a>
+                    {% if user.is_authenticated %}
                     <a href="/admin" class="nav-link">Painel de Admin</a>
+                    {% endif %}
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -140,6 +174,14 @@
             </div>
         </nav>
     </header>
+    <!-- Linguas -->
+    <div style="display: flex; position: absolute; top: 215px; left: 15px; width: 75px;">
+        <select class="form-select" aria-label="Language/ Língua" id="lang-select" onchange="changeValue()">
+            <option value="pt">🇧🇷</option>
+            <option value="en">🇺🇸</option>
+            <option value="de">🇩🇪</option>
+        </select>
+    </div>
     <div class="content container" style="height: auto; min-height: 100%;">
         <div class="row">
             {% block content %}

@@ -2,6 +2,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+{% if category %}
 <span style="display: flex; flex-direction: row; justify-content: space-evenly;">
     <a href="{% url 'post_new' category=category.name %}" class="top-menu"
         style="margin-top: 50px; display: flex; flex-direction: column; align-items: center;">
@@ -14,6 +15,7 @@
         <p> Criar Categoria </p>
     </a>
 </span>
+{% endif %}
 {% endif %}
 
 <section>
@@ -40,7 +42,7 @@
                         <div class="btn-custom">
                             <button class="button-bb"
                                 onclick="(() => window.location.href = `{% url 'post_details' category=post.category pk=post.pk %}`)()">
-                                Ler {{ post.category.short_name }}
+                                {{ post.category.short_name }}
                             </button>
                         </div>
                     </div>

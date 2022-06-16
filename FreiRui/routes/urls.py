@@ -4,7 +4,8 @@ from django.urls import URLPattern, path
 from FreiRui import routes
 
 '''
-importa todos os arquivos de rotas do diretório routes e concatena na urlpatterns
+importa todos os arquivos de rotas do diretório routes e concatena na
+urlpatterns
 '''
 
 urlpatterns: List[URLPattern] = []

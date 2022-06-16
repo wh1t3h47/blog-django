@@ -4,6 +4,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+{% if category %}
 <span style="display: flex; flex-direction: row; justify-content: space-evenly;">
     {% if posts.pk %}
     <a href="{% url 'post_edit' pk=posts.pk %}" class="top-menu"
@@ -55,6 +56,7 @@
         });
     };
 </script>
+{% endif %}
 {% endif %}
 
 <section>

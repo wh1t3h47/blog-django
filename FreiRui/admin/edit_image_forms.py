@@ -1,5 +1,5 @@
 from django import forms
-from ..models.Images import Images
+from FreiRui.models.Images import Images
 
 
 class EditImageForm(forms.ModelForm):

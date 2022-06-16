@@ -178,12 +178,6 @@ h2 {
   text-decoration: none;
 }
 
-.borda-custom {
-  border-bottom: 2px solid red;
-  width: 20px;
-  height: 1;
-}
-
 .title-homilias span a {
   font-family: "Dosis", Arial, Helvetica, "Nimbus Sans L", sans-serif;
   font-size: 18px;
@@ -193,6 +187,10 @@ h2 {
   text-transform: none;
   text-decoration: none;
   color: #2264ac;
+}
+
+.title-homilias {
+  margin: 0 0 50px 0;
 }
 
 .span-padding {

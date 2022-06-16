@@ -1,5 +1,5 @@
 from django import forms
-from ..models.Posts import Posts
+from FreiRui.models.Posts import Posts
 
 # class FileFieldForm(forms.Form):
 #     file_field = forms.FileField(

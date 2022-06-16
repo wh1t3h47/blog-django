@@ -107,6 +107,7 @@
 
     const oldWindowOnload = window.onload;
     window.onload = () => {
+        oldWindowOnload && oldWindowOnload();
         if (window.listingType === 'accordion') {
             setAccordion();
         } else if (window.listingType === 'cards') {
@@ -196,7 +197,7 @@
                 id="id_order">
         </div>
         <p class="spaceinput">
-            <label for="id_short_name">Nome curto:</label>
+            <label for="id_short_name">Texto do botão de ler:</label>
             <a class="id_short_name text-inherit mr-3 fas fa-question-circle id_name" data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Esse nome é utilizado para gerar o botão que vai levar à postagem, por exemplo, se for Texto, o botão vai estar escrito “Ler texto”"></a>

@@ -12,6 +12,7 @@ from FreiRui.admin.edit_image_forms import EditImageForm
 from FreiRui.models.Categories import Categories
 from FreiRui.models.Galleries import Galleries
 from FreiRui.models.Images import Images
+from FreiRui.views.category.get_categories import get_categories
 
 Response = Union[HttpResponse, JsonResponse]
 
@@ -48,9 +49,5 @@ def image_edit(request: HttpRequest, picture_path: str) -> Response:
     image_form.fields['images'].widget.attrs['style'] = "display: none;"
     picture = get_object_or_404(Images, image=picture_path)
     # print(f'formset: {formset}')
-    if (request.user.is_authenticated):
-        categories: List[Categories] = Categories.objects.order_by('order')
-    else:
-        categories: List[Categories] = Categories.objects.filter(
-            published=True, ).order_by('order')
+    categories = get_categories(request)
     return render(request, 'picture/edit.html', {'image_form': image_form, 'picture': picture, 'categories': categories})

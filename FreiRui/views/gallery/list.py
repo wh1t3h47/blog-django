@@ -8,18 +8,17 @@ from FreiRui.models.Categories import Categories
 from FreiRui.models.Galleries import Galleries
 from FreiRui.models.Images import Images
 from FreiRui.models.Posts import Posts
+from FreiRui.views.category.get_categories import get_categories
 
 
 @login_required
 def gallery_list(request: HttpRequest) -> HttpResponse:
+    categories = get_categories(request)
     if (request.user.is_authenticated):
-        categories: List[Categories] = Categories.objects.order_by('order')
         posts: List[Posts] = Posts.objects.order_by('published_date')
     else:
         posts: List[Posts] = Posts.objects.filter(
             category__published=True).order_by('published_date')
-        categories: List[Categories] = Categories.objects.filter(
-            published=True, ).order_by('order')
     posts_list = [*posts]
     galleries: List[List[str]] = []
 
@@ -33,4 +32,7 @@ def gallery_list(request: HttpRequest) -> HttpResponse:
                                        for image in all_images]
             pictures_in_post = [*pictures_in_post, *images_links]
         galleries.append(pictures_in_post)
-    return render(request, 'gallery/list.html', {'galleries': galleries, 'categories': categories})
+    return render(request, 'gallery/list.html', {
+        'galleries': galleries,
+        'categories': categories
+    })

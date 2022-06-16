@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, render
 from FreiRui.admin.post_forms import PostForm
 from FreiRui.models.Categories import Categories
 from FreiRui.models.Posts import Posts
+from FreiRui.views.category.get_categories import get_categories
 
 
 def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: str = None, category: str = '') -> HttpResponse:
@@ -35,10 +36,6 @@ def return_rendered_html_forms(request: HttpRequest, post_form: PostForm, pk: st
     if category:
         default_values['category'] = category
     # print(f'formset: {formset}')
-    if (request.user.is_authenticated):
-        categories: List[Categories] = Categories.objects.order_by('order')
-    else:
-        categories: List[Categories] = Categories.objects.filter(
-            published=True, ).order_by('order')
+    categories = get_categories(request)
     return render(request, 'post/edit.html',
                   {'post_form': post_form, 'default_values': default_values, 'categories': categories})

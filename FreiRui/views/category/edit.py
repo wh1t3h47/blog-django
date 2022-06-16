@@ -1,7 +1,6 @@
 from typing import List, Union
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-from django.utils import timezone
 from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
@@ -9,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from FreiRui.admin.category_forms import CategoryForm
 from FreiRui.models.Categories import Categories
+from FreiRui.views.category.get_categories import get_categories
 
 ResponseOrRedirect = Union[HttpResponse,
                            HttpResponseRedirect, HttpResponsePermanentRedirect]
@@ -55,10 +55,6 @@ def category_edit(request: HttpRequest, pk: str) -> ResponseOrRedirect:
     # category_form.fields['short_name'].widget.attrs['value'] = category.short_name
     # category_form.fields['title'].widget.attrs['value'] = category.title
     # print(f'formset: {formset}')
-    if (request.user.is_authenticated):
-        categories: List[Categories] = Categories.objects.order_by('order')
-    else:
-        categories: List[Categories] = Categories.objects.filter(
-            published=True, ).order_by('order')
+    categories = get_categories(request)
     return render(request, 'category/edit.html',
                   {'category_form': category_form, 'category': category, 'categories': categories})

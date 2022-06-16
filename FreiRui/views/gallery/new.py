@@ -9,6 +9,7 @@ from FreiRui.admin.image_forms import ImageForm
 from FreiRui.models.Categories import Categories
 from FreiRui.models.Images import Images
 from FreiRui.models.Galleries import Galleries
+from FreiRui.views.category.get_categories import get_categories
 
 ResponseOrRedirect = Union[HttpResponse, JsonResponse]
 
@@ -39,9 +40,5 @@ def gallery_new(request: HttpRequest) -> ResponseOrRedirect:
         return HttpResponse(status=422)
     # else if request.method == "GET":
     form = ImageForm()
-    if (request.user.is_authenticated):
-        categories: List[Categories] = Categories.objects.order_by('order')
-    else:
-        categories: List[Categories] = Categories.objects.filter(
-            published=True, ).order_by('order')
+    categories = get_categories(request)
     return render(request, 'gallery/new.html', {'form': form, 'categories': categories})

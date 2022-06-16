@@ -6,6 +6,7 @@ from django.conf import settings
 # from tarfile import open as tarfile_open
 from tarsafe import open as tarfile_open
 
+
 def extract_inside_folder(tar, folder="media/"):
     after_folder = len(folder)
     for member in tar.getmembers():
@@ -15,7 +16,7 @@ def extract_inside_folder(tar, folder="media/"):
 
 
 @login_required
-def restore_media(request: HttpRequest): 
+def restore_media(request: HttpRequest):
     '''
     View para fazer restauração de um arquivo .tar.gz, esse arquivo vai
     conter uma pasta media com os arquivos e vai ser enviado por post
@@ -32,7 +33,8 @@ def restore_media(request: HttpRequest):
         # Create the tarfile from the uploaded file
         with tarfile_open(fileobj=uploaded_file, mode='r:gz') as tar:
             # Extract anything from the tarfile's folder media to the media folder
-            tar.extractall(path=settings.MEDIA_ROOT, members=extract_inside_folder(tar))
+            tar.extractall(path=settings.MEDIA_ROOT,
+                           members=extract_inside_folder(tar))
         # Return the response
         messages.success(request, 'Restored media')
         return HttpResponseRedirect('/admin/')

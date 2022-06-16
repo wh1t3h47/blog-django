@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
-DEBUG = True if (DEBUG == 'True' or DEBUG == 'true' or DEBUG == '1') else False
+DEBUG = True if (DEBUG in ['True', 'true', 'TRUE', '1']) else False
 
 ALLOWED_HOSTS = [env('HOST')]
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'request',
     'smuggler',
     'defender',
+    'modeltranslation',
     'FreiRui',
 ]
 
@@ -66,6 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'defender.middleware.FailedLoginMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'FreiRui.middleware.translation_middleware.translation_middleware',
 ]
 
 ROOT_URLCONF = 'FreiRui.urls'
@@ -107,16 +110,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -125,6 +132,24 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'pt-br'
+
+
+def gettext(s): return s
+
+
+LANGUAGES = [
+    ('de', gettext('German')),
+    ('en', gettext('English')),
+    ('pt', gettext('Portuguese')),
+]
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'pt'
+
+MODELTRANSLATION_FALLBACK_LANGUAGES = {
+    'en': ('pt', 'de'),
+    'default': ('en', 'de'),
+    'de': ('en', 'pt'),
+}
 
 TIME_ZONE = 'UTC'
 
@@ -150,7 +175,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 
-# Path where media is stored</span>
+# Path where media is stored
 MEDIA_ROOT = join(BASE_DIR, 'media/')
 
 # Social Auth configuration

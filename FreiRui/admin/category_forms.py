@@ -1,5 +1,5 @@
 from django import forms
-from ..models.Categories import Categories
+from FreiRui.models.Categories import Categories
 
 
 class CategoryForm(forms.ModelForm):

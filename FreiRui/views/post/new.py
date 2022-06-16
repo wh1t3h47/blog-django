@@ -15,16 +15,18 @@ ResponseOrRedirect = Union[HttpResponse,
 
 @login_required
 def post_new(request: HttpRequest, category: str) -> ResponseOrRedirect:
-    print(f'category: {category}')
     if request.method == "POST":
         post_form = PostForm(request.POST)
         if post_form.is_valid():
             post: PostForm = post_form.save(commit=False)
             post.author = request.user
-            post.published_date = timezone.now()
+            # Comentado em favor de agendar publicações no futuro
+            # post.published_date = timezone.now()
             post.save()
             post_form.save_m2m()
-            return HttpResponseRedirect(f"/postagens/{post_form.cleaned_data['category'].replace(' ', '_')}/{post.pk}")
+            return HttpResponseRedirect(f"""/postagens/{
+                post_form.cleaned_data['category'].name.replace(' ', '_')
+                }/{post.pk}""")
     # else if request.method == "GET":
     post_form = PostForm()
     return return_rendered_html_forms(request, post_form, category=category)
