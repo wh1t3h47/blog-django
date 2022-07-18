@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from psycopg2cffi import compat
+compat.register()
+
 from pathlib import Path
 from os.path import join
 
@@ -104,6 +107,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'PASSWORD': env('DB_PASSWORD'),
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'OPTIONS': {
+#             'service': 'my_service',
+#             'passfile': '.my_pgpass',
+#         },
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

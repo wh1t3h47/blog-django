@@ -7,7 +7,7 @@ coverage
 django-debug-toolbar
 greeking
 flake8
-psycopg
+psycopg2cffi
 # pycrypto (Unmantained)
 pycryptodome
 pyflakes
@@ -31,3 +31,4 @@ django-defender
 tarsafe
 django-modeltranslation
 redis-py
+django_redis
