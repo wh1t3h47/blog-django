@@ -3,10 +3,12 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from django.conf import settings
-from datetime import timedelta
-from redis import StrictRedis
-from requests_cache import CachedSession
+# from django.conf import settings
+# from datetime import timedelta
+# from redis import StrictRedis
+from requests import get
+# from requests_cache import CachedSession
+from django.core.cache import cache
 
 
 from FreiRui.views.category.get_categories import get_categories
@@ -15,27 +17,27 @@ from FreiRui.models.Posts import Posts
 from FreiRui.settings import MODELTRANSLATION_FALLBACK_LANGUAGES
 
 # redis_cache = StrictRedis.from_url(REDIS_URL)
-session = CachedSession(
-    'youtube_rss',
-    # Save files in the default user cache dir
-    use_cache_dir=True,
-    # Use Cache-Control headers for expiration, if available
-    cache_control=True,
-    # Otherwise expire responses after one day
-    expire_after=timedelta(minutes=15),
-    # Cache POST requests to avoid sending the same data twice
-    allowable_methods=['GET', 'POST'],
-    allowable_codes=[200],
-    # Match all request headers
-    match_headers=False,
-    # In case of request errors, use stale cache data if possible
-    stale_if_error=True,
-    # Use the redis cache backend
-    backend='redis',
-    host=f"{settings.REDIS_HOST}",
-    port=int(settings.REDIS_PORT),
-    password=settings.REDIS_PASSWORD,
-)
+# session = CachedSession(
+#     'youtube_rss',
+#     # Save files in the default user cache dir
+#     use_cache_dir=True,
+#     # Use Cache-Control headers for expiration, if available
+#     cache_control=True,
+#     # Otherwise expire responses after one day
+#     expire_after=timedelta(minutes=15),
+#     # Cache POST requests to avoid sending the same data twice
+#     allowable_methods=['GET', 'POST'],
+#     allowable_codes=[200],
+#     # Match all request headers
+#     match_headers=False,
+#     # In case of request errors, use stale cache data if possible
+#     stale_if_error=True,
+#     # Use the redis cache backend
+#     backend='redis',
+#     host=f"{settings.REDIS_HOST}",
+#     port=int(settings.REDIS_PORT),
+#     password=settings.REDIS_PASSWORD,
+# )
 
 
 def get_fallback(lang: str):
@@ -140,9 +142,14 @@ def post_list(
         if youtube_url:
             # import time
             # start = time.time()
-            youtube_rss = session.get(
-                f'https://www.youtube.com/feeds/videos.xml?channel_id={youtube_url}'
-            ).text
+            youtube_rss = cache.get(youtube_url)
+            if not youtube_rss:
+                youtube_rss = get(
+                    f'https://www.youtube.com/feeds/videos.xml?channel_id={youtube_url}'
+                ).text
+                cache.set(youtube_url, youtube_rss, timeout=60 * 10)
+            else:
+                youtube_rss = cache.get(youtube_url)
             # end = time.time()
             # print(f'{end - start} seconds')
 

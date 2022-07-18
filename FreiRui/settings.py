@@ -289,3 +289,14 @@ REDIS_HOST = env('REDIS_HOST')
 REDIS_PORT = env('REDIS_PORT')
 REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
 DEFENDER_REDIS_URL = REDIS_URL
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'{REDIS_URL}/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        },
+        'KEY_PREFIX': 'django_orm'
+    }
+}

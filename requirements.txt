@@ -25,9 +25,9 @@ django-crontab
 beautifulsoup4
 markdown
 requests
-requests-cache
 django-request
 django-smuggler
 django-defender
 tarsafe
 django-modeltranslation
+redis-py
