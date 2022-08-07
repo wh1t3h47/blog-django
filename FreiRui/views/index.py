@@ -10,7 +10,6 @@ from FreiRui.views.category.new import category_new
 def index(request: HttpRequest) -> HttpResponse:
     lang = request.COOKIES.get('lang', 'pt')
     categories = get_categories(request)
-    print(categories)
     # print(categories)
     if len(categories) > 0:
         category = categories[0]
