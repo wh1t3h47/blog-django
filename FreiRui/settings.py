@@ -10,13 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import environ
+from os.path import join
+from pathlib import Path
 from psycopg2cffi import compat
 compat.register()
 
-from pathlib import Path
-from os.path import join
-
-import environ
 
 env = environ.Env()
 
