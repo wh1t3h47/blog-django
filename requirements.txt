@@ -30,5 +30,7 @@ django-smuggler
 django-defender
 tarsafe
 django-modeltranslation
-redis-py
+# redis-py
 django_redis
+django
+django-environ
