@@ -8,6 +8,12 @@ body {
   overflow-x: hidden;
 }
 
+.navbar-nav .nav-item,
+.nav-link,
+.dropdown-item {
+  font-size: 1.15rem;
+}
+
 .bg-custom-header {
   background-color: #d3edfc;
 }

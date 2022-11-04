@@ -15,7 +15,7 @@ class Posts(models.Model):
         Categories, on_delete=models.DO_NOTHING,
         verbose_name="Categoria da postagem", db_index=True)
     title = models.CharField(max_length=TITLE_LENGTH,
-                             verbose_name="Título", blank=True, null=True)
+                             verbose_name="Título", blank=True)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(default=timezone.now)

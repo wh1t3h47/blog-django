@@ -67,9 +67,11 @@
     <p class="text-danger"> Postagem deletada </p>
     {% endif %}
     <div style="padding-bottom: 30px; padding-top: 30px;" class="d-flex justify-content-center h1-quemsomos">
+        {% if posts.title %}
         <h1>
             {{ posts.title }}
         </h1>
+        {% endif %}
     </div>
 
     <div class="p-text-center">
