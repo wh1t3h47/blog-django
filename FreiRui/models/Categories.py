@@ -13,7 +13,7 @@ class Categories(models.Model):
         max_length=CATEGORY_LENGTH, verbose_name="Nome curto (singular)",
         blank=True)
     title = models.CharField(
-        max_length=255,
+        max_length=511,
         verbose_name="Título (página)",
         blank=True)
     listing_type: Union[Literal['accordion'],

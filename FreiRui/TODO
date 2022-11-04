@@ -11,3 +11,8 @@ Middleware for youtube?
 
 categoria de texto único dá bug quando está vazia
 
+Título da categoria tem poucas letras disponíveis
+
+Na hora de editar um texto de categoria única, quando salva, o redirecionamento fica inválido (404)
+
+categoria da postagem não vem preenchida com acento

@@ -37,7 +37,7 @@
 
         <div class="btn-custom">
             <button class="button-bb"
-                onclick="(() => window.location.href = `{% url 'post_details' category=post.category pk=post.pk %}`.replace('%20', '_'))()">
+                onclick="(() => window.location.href = window.encodeURI(`{% url 'post_details' category=post.category pk=post.pk %}`).replace('%20', '_'))()">
                 {{ post.category.short_name }}
             </button>
         </div>

@@ -35,8 +35,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 DEBUG = True if (DEBUG in ['True', 'true', 'TRUE', '1']) else False
 
-ALLOWED_HOSTS = [env('HOST')]
-
+ALLOWED_HOSTS = [env('HOST'), '45.90.223.218']
 
 # Application definition
 
@@ -96,26 +95,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'FreiRui.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+# }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+     'default': {
+         'PASSWORD': env('DB_PASSWORD'),
+         'ENGINE': 'django.db.backends.postgresql',
+         'OPTIONS': {
+             'service': 'db_freirui',
+             #'passfile': '.pgpass',
+         },
+     }
+ }
 
-# DATABASES = {
-#     'default': {
-#         'PASSWORD': env('DB_PASSWORD'),
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'OPTIONS': {
-#             'service': 'my_service',
-#             'passfile': '.my_pgpass',
-#         },
-#     }
-# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -146,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'pt-br'
 
 
-def gettext(s): return s
+def gettext(s: str): return s
 
 
 LANGUAGES = [
@@ -211,7 +209,7 @@ CRONJOBS = [
     ('*/2 * * * *', 'FreiRui.cron.post_to_social_media'),
 ]
 
-REQUEST_BASE_URL = 'https://env("HOST")'
+REQUEST_BASE_URL = f'https://{env("HOST")}'
 REQUEST_IGNORE_USER_AGENTS = (
     r'^$',  # ignore requests with no user agent string set
     r'Googlebot',

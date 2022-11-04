@@ -137,3 +137,5 @@ GitHub.sublime-settings
 .history
 .dccache
 *.sqlite
+.pgpass
+.my_pgpass

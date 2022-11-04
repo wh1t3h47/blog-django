@@ -1,4 +1,5 @@
 from typing import List, Literal, Union
+from urllib.parse import unquote
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import render
@@ -99,6 +100,9 @@ def post_list(
     if categories is None:
         categories = get_categories(request)
     category = category.replace('_', ' ') if category else categories[0].name
+    # Workaround for diacritics bugs with links
+    print(f"category: {category}")
+    category = unquote(category)
     lang = request.COOKIES.get('lang', 'pt')
     prev_lang = request.COOKIES.get('prev_lang', '')
     if lang == prev_lang:
@@ -114,7 +118,7 @@ def post_list(
         if (request.user.is_authenticated):
             posts: List[Posts] = Posts.objects.filter(
                 **{category_name: category}
-            ).order_by('published_date')
+            ).order_by('-published_date')
         else:
             posts: List[Posts] = Posts.objects.filter(
                 **{category_name: category,
@@ -122,7 +126,7 @@ def post_list(
                     "is_deleted": False,
                     "published_date__lte": timezone.now()
                    }
-            ).order_by('published_date')
+            ).order_by('-published_date')
         lang = fallback[0] if len(fallback) > 0 else None
     lang = original_lang
     # [print(category.__dict__) for category in categories]

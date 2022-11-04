@@ -15,12 +15,41 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    
+    <!-- whatsapp-->
+    {% if previewImgLink %}
+    <meta property="og:image" content="{{ previewImgLink }}">
+    {% endif %}
+    {% if previewTitle %}
+    <meta property="og:title" content="{{ previewTitle }}">
+    {% endif %}
+    {% if previewDescription %}
+    <meta property="og:description" content="{{ previewDescription }}">
+    {% endif %}
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Legado do FreiRui Guido Depiné">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:locale:alternate" content="de_DE">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    {% if previewTitle %}
+    <meta name="twitter:title" content="{{ previewTitle }}">
+    {% endif %}
+    {% if previewDescription %}
+    <meta name="twitter:description" content="{{ previewDescription }}">
+    {% endif %}
+    {% if previewImgLink %}
+    <meta name="twitter:image" content="{{ previewImgLink }}">
+    {% endif %}
 
     <script>
         function goToCategory(category) {
             this.event.preventDefault();
             const prettifiedUrl = category.replace(/\s|%20/g, '_');
-            window.location.href = prettifiedUrl;
+            window.location.href = window.encodeURI(prettifiedUrl);
         }
         
         const getCookieLang = () => (/.*lang=([^;]*).*/i.exec(document.cookie) ?? [''])[1] || 'pt';
@@ -60,13 +89,15 @@
             window.location.reload();
         }
 
-        window.onload = () => setSelectedLanguage();
+        window.onload = () => {
+            setSelectedLanguage();
+        };
     </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Legado do Frei Rui Guido Depiné, obras, textos, eventos e ações do Frei, conteúdo católico e cristão sem fins lucrativos">
+        content="Legado do Frei Rui Guido Depiné, obras, textos, poesias, homilias, histórias, eventos e ações">
     <title>Legado do Frei Rui Guido Depiné</title>
     <!-- meta property="fb:page_id" content="271595581748248" -->
 </head>
@@ -178,8 +209,8 @@
     <div style="display: flex; position: absolute; top: 215px; left: 15px; width: 75px;">
         <select class="form-select" aria-label="Language/ Língua" id="lang-select" onchange="changeValue()">
             <option value="pt">🇧🇷</option>
-            <option value="en">🇺🇸</option>
-            <option value="de">🇩🇪</option>
+            <option value="en" disabled>🇺🇸</option>
+            <option value="de" disabled>🇩🇪</option>
         </select>
     </div>
     <div class="content container" style="height: auto; min-height: 100%;">
