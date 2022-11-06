@@ -16,3 +16,12 @@ Título da categoria tem poucas letras disponíveis
 Na hora de editar um texto de categoria única, quando salva, o redirecionamento fica inválido (404)
 
 categoria da postagem não vem preenchida com acento
+
+
+Quando uma imagem quebra, ainda aparece o botão de editar
+
+## nginx:
+- Encoding estranho (poderia ser acentos na URL)
+- Cache/ SEO
+- mudar o socket do uwsgi pra UDS (unix domain socket)
+- Configurar o ini do uwsgi
