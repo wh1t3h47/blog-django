@@ -13,9 +13,13 @@
     <!-- Google keeps breaking SRI hashes, so I removed it -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap" />
+    {% if user.is_authenticated %}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"
         integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS?display=swap"
         crossorigin="anonymous" media="print" onload="this.media='all'">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'fontawesome.css' %}">
+    {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
