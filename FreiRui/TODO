@@ -22,6 +22,3 @@ Quando uma imagem quebra, ainda aparece o botão de editar
 
 ## nginx:
 - Encoding estranho (poderia ser acentos na URL)
-- Cache/ SEO
-- mudar o socket do uwsgi pra UDS (unix domain socket)
-- Configurar o ini do uwsgi
