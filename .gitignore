@@ -139,3 +139,5 @@ GitHub.sublime-settings
 *.sqlite
 .pgpass
 .my_pgpass
+
+node_modules

@@ -1,0 +1,27 @@
+{
+  "name": "FreiRui",
+  "version": "1.0.0",
+  "main": "",
+  "author": "wh1t3h47 <tom.mharres@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chalk": "^5.1.2",
+    "cssmin": "^0.4.3",
+    "grunt": "^1.5.3",
+    "grunt-cli": "^1.4.3",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-connect": "^3.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^4.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-processhtml": "^0.4.3",
+    "grunt-simple-mocha": "^0.4.1",
+    "grunt-uncss": "^0.10.1",
+    "load-grunt-tasks": "^5.1.0",
+    "maxmin": "^4.0.0",
+    "time-grunt": "^2.0.0",
+    "uncss": "^0.17.3",
+    "xo": "^0.52.4"
+  }
+}
