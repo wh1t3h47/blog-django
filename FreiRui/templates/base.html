@@ -17,7 +17,7 @@
         integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS?display=swap"
         crossorigin="anonymous" media="print" onload="this.media='all'">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <!-- link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="preload" href="{% static 'style.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript>
@@ -117,7 +117,7 @@
             <div class="container-fluid">
                 <div class="text-bg" style="margin-left: 5px;">
                     <a class="navbar-brand" href="/">
-                        <img src="{% static 'logo.png' %}" width="170" height="170" alt="contornos do Frei Rui">
+                        <img src="{% static 'logo.webp' %}" width="170" height="170" alt="contornos do Frei Rui">
                     </a>
                     {% if user.is_authenticated %}
                     <a href="/admin" class="nav-link">Painel de Admin</a>
@@ -238,11 +238,11 @@
                 <div class="col-md-4 d-flex justify-content-end icons-footer">
                     <a href="https://www.facebook.com/Legado-do-Frei-Rui-Depin%C3%A9-101772318808572/"
                         class="btn btn-outline">
-                        <i class="fab fa-facebook" style="color: #2264ac"></i>
+                        <i aria-hidden="true" class="fab fa-facebook" style="color: #2264ac" title="Facebook"></i>
                     </a>
 
                     <a href="https://www.youtube.com/channel/UCNC-pWwv7UpVAOZ9nBH7-HA" class="btn btn-outline ml-2">
-                        <i class="fab fa-youtube" style="color: #2264ac"></i>
+                        <i aria-hidden="true" class="fab fa-youtube" style="color: #2264ac" title="youtube"></i>
                     </a>
                 </div>
             </div>
