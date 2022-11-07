@@ -33,16 +33,14 @@
             <div class="col" style="width: 300px;">
                 <div class="card mt-5 mb-5 card-size">
                     <div class="card-body d-flex title-homilias flex-column align-items-center">
+                        {% if post.title %}
                         <h5 class="post-title {% if post.is_deleted %} text-danger {% endif %}">
                             {% if post.published_date > now %}
                             <i class="far fa-clock text-danger"></i>
                             {% endif %}
-                            {% if posts.title %}
-                            <h1>
-                                {{ posts.title }}
-                            </h1>
-                            {% endif %}
+                            {{ post.title }}
                         </h5>
+                        {% endif %}
                         <div class="btn-custom">
                             <button class="button-bb"
                                 onclick="(() => window.location.href = window.encodeURI(`{% url 'post_details' category=post.category pk=post.pk %}`))()">

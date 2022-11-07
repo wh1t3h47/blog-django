@@ -31,10 +31,8 @@
             {% if post.published_date > now %}
             <i class="far fa-clock text-danger"></i>
             {% endif %}
-            {% if posts.title %}
-            <h1>
-            {{ posts.title }}
-            </h1>
+            {% if post.title %}
+            {{ post.title }}
             {% endif %}
         </span>
         <hr style="color: #544f4f; width: 450px;">

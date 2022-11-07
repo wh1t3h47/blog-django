@@ -60,10 +60,10 @@
 {% endif %}
 
 <section>
-    {% if post.published_date > now %}
+    {% if posts.published_date > now %}
     <i class="far fa-clock text-danger"></i>
     {% endif %}
-    {% if post.is_deleted %}
+    {% if posts.is_deleted %}
     <p class="text-danger"> Postagem deletada </p>
     {% endif %}
     <div style="padding-bottom: 30px; padding-top: 30px;" class="d-flex justify-content-center h1-quemsomos">
