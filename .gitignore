@@ -9,6 +9,8 @@ media
 # Backup files # 
 *.bak 
 
+pgdata
+
 # If you are using PyCharm # 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -139,5 +141,6 @@ GitHub.sublime-settings
 *.sqlite
 .pgpass
 .my_pgpass
-
 node_modules
+
+redis.conf

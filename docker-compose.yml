@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  api:
+    container_name: 'freirui_dev'
+    image: 'freirui_dev'
+    command: python3 ./manage.py runserver
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: 'dev'
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PGPASSFILE=/opt/app/.pgpass
+      - PGSERVICEFILE=/opt/app/.pg_service.conf
+    networks:
+      - FreiRui-network
+    volumes:
+      - ./:/usr/src/app
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - postgres
+  redis:
+    container_name: FreiRui_db_redis
+    image: redis:7.0.5-alpine
+    networks:
+      - FreiRui-network
+    # environment:
+    ports:
+      - 11571:11571
+  postgres:
+    container_name: FreiRui_db_postgres
+    image: postgres:14.3-alpine
+    networks:
+      - FreiRui-network
+    env_file:
+      - FreiRui/.env
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER:blog
+      - POSTGRES_DB:db_freirui
+      - PG_DATA:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata/data:/var/lib/postgresql/data
+networks:
+  FreiRui-network:

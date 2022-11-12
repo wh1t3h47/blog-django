@@ -1,0 +1,16 @@
+db.sqlite3
+FreiRui.uwsgi.ini
+package.json
+yarn.lock
+lint.sh
+Gruntfile.js
+docker-compose.yml
+.git
+.gitignore
+README.md
+.dccache
+TODO
+FreiRui/media/*
+FreiRui/static/*
+node_modules
+pgdata

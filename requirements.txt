@@ -1,4 +1,5 @@
 Django
+tzdata
 Pillow
 Fabric
 argparse
@@ -34,3 +35,4 @@ django-modeltranslation
 django_redis
 django
 django-environ
+django-htmlmin
